@@ -97,6 +97,7 @@ export default function Home() {
           />
           Go to nextjs.org →
         </a>
+        <a href="/upload" className="underline text-blue-600">Go to Upload</a>
       </footer>
     </div>
   );
