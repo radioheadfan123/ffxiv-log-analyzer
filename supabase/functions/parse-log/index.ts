@@ -1,4 +1,5 @@
-import { createClient } from "@supabase/supabase-js";
+// supabase/functions/parse-log/index.ts
+import { createClient as createSbClient } from "@supabase/supabase-js";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -9,139 +10,281 @@ const corsHeaders = {
 
 const SUPABASE_URL = Deno.env.get("SB_URL")!;
 const SERVICE_ROLE = Deno.env.get("SB_SERVICE_ROLE_KEY")!;
-const supa = createClient(SUPABASE_URL, SERVICE_ROLE);
+const supa = createSbClient(SUPABASE_URL, SERVICE_ROLE);
+
 
 type InvokeBody = { upload_id: string; path: string };
 
-function jobToRole(job?: string) {
-  const t = (job || "").toUpperCase();
-  if (["PLD", "WAR", "DRK", "GNB"].includes(t)) return "tank";
-  if (["WHM", "SCH", "AST", "SGE"].includes(t)) return "healer";
-  return "dps";
+const RE_HIT   = /^(.*?)\s+hits\s+(.+?)\s+for\s+(\d+)\s+damage\.?$/i;
+const RE_TAKES = /^(?:critical!\s*|direct hit!\s*)?(.+?)\s+takes\s+(\d+)\s+damage\.?$/i;
+
+const toMs  = (s?: string) => { const d = s ? new Date(s) : null; return d && !isNaN(d.getTime()) ? d.getTime() : null; };
+const toIso = (s?: string) => { const d = s ? new Date(s) : null; return d && !isNaN(d.getTime()) ? d.toISOString() : null; };
+
+// --- Breadcrumb helper (writes to uploads.error) ---
+let _uploadId = "";
+async function note(s: string) {
+  try {
+    if (!_uploadId) return;
+    await supa.from("uploads").update({ error: s }).eq("id", _uploadId);
+  } catch {
+    // swallow: breadcrumbs must never crash the function
+  }
 }
 
-function parseTimestamp(raw: string) {
-  const d = new Date(raw);
-  if (isNaN(d.getTime())) return null;
-  return d;
+// Split fights by idle time between damage logs. If none found, fallback to whole file.
+function splitByDamageIdle(lines: string[], idleMs = 8000) {
+  const idxs: number[] = [];
+  for (let i = 0; i < lines.length; i++) {
+    const p = lines[i].split("|");
+    if (p.length < 2) continue;
+    const code = p[0];
+    if (code === "00") {
+      const msg = (p[4] ?? p[3] ?? p[2] ?? "").trim();
+      if (/hits\s+.+?\s+for\s+\d+\s+damage/i.test(msg) || /takes\s+\d+\s+damage/i.test(msg)) idxs.push(i);
+    } else if (code === "21" || code === "22") {
+      idxs.push(i);
+    }
+  }
+
+  if (idxs.length === 0) {
+    if (!lines.length) return [] as { lines: string[]; start: string; end: string }[];
+    const firstTs = toIso(lines[0].split("|")[1]);
+    const lastTs  = toIso(lines.at(-1)!.split("|")[1]) ?? firstTs ?? new Date().toISOString();
+    return [{ lines: [...lines], start: firstTs ?? new Date().toISOString(), end: lastTs }];
+  }
+
+  const tsOf = (i: number) => toMs(lines[i].split("|")[1] || "") ?? 0;
+  const cuts = [0];
+  for (let k = 1; k < idxs.length; k++) if (tsOf(idxs[k]) - tsOf(idxs[k - 1]) > idleMs) cuts.push(k);
+  cuts.push(idxs.length);
+
+  const fights: { lines: string[]; start: string; end: string }[] = [];
+  for (let c = 0; c < cuts.length - 1; c++) {
+    const a = idxs[cuts[c]], b = idxs[cuts[c + 1] - 1];
+    const slice = lines.slice(a, b + 1);
+    const startIso = toIso(slice[0].split("|")[1]) ?? new Date().toISOString();
+    const endIso   = toIso(slice.at(-1)!.split("|")[1]) ?? startIso;
+    fights.push({ lines: slice, start: startIso, end: endIso });
+  }
+  return fights;
 }
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
   try {
-    const { upload_id, path } = (await req.json()) as InvokeBody;
+    // Parse body first (for breadcrumbs)
+    let body: InvokeBody | null = null;
+    try { body = await req.json(); } catch { body = null; }
+
+    const upload_id = body?.upload_id;
+    const path = body?.path;
+    _uploadId = upload_id || "";
+
     if (!upload_id || !path) {
+      await note("bad body (missing upload_id or path)");
       return new Response(JSON.stringify({ error: "Missing upload_id or path" }), { status: 400, headers: corsHeaders });
     }
 
-    await supa.from("uploads").update({ status: "parsing", error: null }).eq("id", upload_id);
+    await supa.from("uploads").update({ status: "parsing", error: "start" }).eq("id", upload_id);
 
+    await note("signing url");
     const { data: sign, error: signErr } = await supa.storage.from("logs").createSignedUrl(path, 600);
-    if (signErr) throw signErr;
+    if (signErr) { await note("signed url err"); throw signErr; }
 
-    const fileResp = await fetch(sign!.signedUrl);
-    if (!fileResp.ok) throw new Error(`fetch log failed (${fileResp.status})`);
-    const text = await fileResp.text();
+    await note("fetching file");
+    const resp = await fetch(sign!.signedUrl);
+    if (!resp.ok) { await note(`fetch ${resp.status}`); throw new Error(`fetch log failed (${resp.status})`); }
 
-    const lines = text.split(/\r?\n/).filter(Boolean);
+    await note("reading text");
+    const text = await resp.text();
+    if (!text) { await note("empty file"); throw new Error("file empty"); }
 
-    // Split into fights by 30s+ inactivity
-    const fights: string[][] = [];
-    let current: string[] = [];
-    let lastTs: Date | null = null;
+    await note("splitting fights");
+    const lines  = text.split(/\r?\n/).filter(Boolean);
+    const fights = splitByDamageIdle(lines, 8000);
+    await note(`fights=${fights.length}`);
 
-    for (const line of lines) {
-      const parts = line.split("|");
-      if (parts.length < 2) continue;
-      const ts = parseTimestamp(parts[1]);
-      if (!ts) continue;
+    let totalEvents = 0, totalActors = 0, totalEncounters = 0;
+    const encounterIds: string[] = []; // <- will return to client
 
-      if (lastTs && ts.getTime() - lastTs.getTime() > 30000 && current.length > 0) {
-        fights.push(current);
-        current = [];
-      }
-      current.push(line);
-      lastTs = ts;
-    }
-    if (current.length > 0) fights.push(current);
+    for (let fIdx = 0; fIdx < fights.length; fIdx++) {
+      const fight = fights[fIdx];
+      await note(`encounter ${fIdx + 1}/${fights.length}: create`);
 
-    const encounterIds: string[] = [];
-
-    for (const fight of fights) {
+      // 1) create encounter
       const { data: enc, error: encErr } = await supa
         .from("encounters")
-        .insert({
-          upload_id,
-          duty: "Unknown Duty",
-          boss: "Unknown",
-          start_ts: new Date(),
-          end_ts: new Date(),
-        })
+        .insert({ upload_id, duty: "Unknown Duty", boss: "Unknown", start_ts: fight.start, end_ts: fight.end })
         .select("id")
         .single();
-      if (encErr) throw encErr;
+      if (encErr) { await note(`encounter insert err`); throw encErr; }
+      const encounter_id = enc.id as string;
+      totalEncounters++;
 
-      const actorMap = new Map<string, string>();
-      const batch: any[] = [];
+      // 2) parse chat damage (00)
+      const tgtCounts = new Map<string, number>();
+      const attackerSet = new Set<string>();
+      type Ev = {
+        tmpName: string; encounter_id: string; ts: string; actor_id: string | null;
+        type: string; skill: string; amount: number; crit: boolean; direct_hit: boolean;
+      };
+      const events: Ev[] = [];
 
-      for (const line of fight) {
-        const parts = line.split("|");
-        if (parts[0] !== "21" && parts[0] !== "22") continue;
+      for (const line of fight.lines) {
+        const p = line.split("|");
+        if (p[0] !== "00") continue;
 
-        const ts = parseTimestamp(parts[1]);
-        const name = parts[3] || "Unknown";
-        const skill = parts[9] || "Unknown";
-        const amount = /^\d+$/.test(parts[10] || "") ? parts[10] : "0";
+        const tsIso = toIso(p[1]) ?? new Date().toISOString();
+        const rawMsg = (p[4] ?? p[3] ?? p[2] ?? "").trim().replace(/^[^\w]*\s*/, "");
 
-        if (!actorMap.has(name)) {
-          const { data: a } = await supa.from("actors")
-            .insert({ encounter_id: enc.id, name, job: "UNK", role: jobToRole("UNK") })
-            .select("id").single();
-          actorMap.set(name, a!.id);
+        const mHit   = rawMsg.match(RE_HIT);
+        const mTakes = rawMsg.match(RE_TAKES);
+        if (!mHit && !mTakes) continue;
+
+        let attacker = "";
+        let amount = 0;
+        const isCrit = /critical/i.test(rawMsg);
+        const isDH   = /direct hit/i.test(rawMsg);
+
+        if (mHit) {
+          attacker = mHit[1].trim();
+          const target = mHit[2].trim();
+          amount = Number(mHit[3] || 0);
+          if (target) tgtCounts.set(target, (tgtCounts.get(target) || 0) + 1);
+        } else {
+          attacker = "Unknown";
+          const target = mTakes![1].trim();
+          amount = Number(mTakes![2] || 0);
+          if (target) tgtCounts.set(target, (tgtCounts.get(target) || 0) + 1);
         }
 
-        batch.push({
-          encounter_id: enc.id,
-          ts: ts ? ts.toISOString() : new Date().toISOString(),
-          actor_id: actorMap.get(name),
+        if (!attacker || !Number.isFinite(amount) || amount <= 0) continue;
+
+        attackerSet.add(attacker);
+        events.push({
+          tmpName: attacker,
+          encounter_id,
+          ts: tsIso,
+          actor_id: null,
           type: "dmg",
-          skill,
-          amount: Number(amount),
-          crit: false,
-          direct_hit: false,
+          skill: "chat",
+          amount,
+          crit: isCrit,
+          direct_hit: isDH,
         });
       }
 
-      if (batch.length) {
-        for (let i = 0; i < batch.length; i += 1000) {
-          const chunk = batch.slice(i, i + 1000);
-          await supa.from("events").insert(chunk);
+      // 3) boss name guess
+      const boss = [...tgtCounts.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ?? "Unknown";
+      await supa.from("encounters").update({ boss }).eq("id", encounter_id);
+
+      // 4) ensure actors
+      const names = Array.from(attackerSet);
+      let idByName = new Map<string, string>();
+
+      if (names.length) {
+        await note(`encounter ${fIdx + 1}: actors select/insert`);
+        const { data: existing, error: exErr } = await supa
+          .from("actors")
+          .select("id,name")
+          .eq("encounter_id", encounter_id)
+          .in("name", names);
+        if (exErr) { await note(`actors select err`); throw exErr; }
+        if (existing) for (const a of existing) idByName.set(a.name, a.id);
+
+        const missing = names.filter((n) => !idByName.has(n)).map((name) => ({
+          encounter_id, name, job: "UNK", role: "dps",
+        }));
+        if (missing.length) {
+          const { data: inserted, error: insErr } = await supa
+            .from("actors")
+            .insert(missing)
+            .select("id,name");
+          if (insErr) { await note(`actors insert err`); throw insErr; }
+          if (inserted) for (const a of inserted) idByName.set(a.name, a.id);
         }
       }
 
-      // Simple DPS metric
-      for (const [, actor_id] of actorMap) {
-        const { data: sums } = await supa.from("events")
-          .select("amount").eq("encounter_id", enc.id).eq("actor_id", actor_id).eq("type", "dmg");
-        const total = (sums || []).reduce((s, e: any) => s + (e.amount || 0), 0);
-        await supa.from("metrics").upsert({
-          encounter_id: enc.id,
-          actor_id,
-          dps: total / Math.max(fight.length, 1),
-          hps: 0,
-          deaths: 0,
-          uptime: 0,
-        });
+      totalActors += idByName.size;
+
+      // 5) insert events
+      const ready = events
+  .map(ev => ({
+    encounter_id: ev.encounter_id,
+    ts: ev.ts,
+    actor_id: idByName.get(ev.tmpName) || null,
+    type: ev.type,
+    skill: ev.skill,
+    amount: ev.amount,
+    crit: ev.crit,
+    direct_hit: ev.direct_hit,
+  }))
+  .filter(e => !!e.actor_id);
+
+if (ready.length === 0) {
+  // nothing useful in this slice → clean up and skip
+  await supa.from('actors').delete().eq('encounter_id', encounter_id);
+  await supa.from('encounters').delete().eq('id', encounter_id);
+  await note(`encounter ${fIdx + 1}: skipped (no mapped events)`);
+  continue; // 🚪 go to next fight
+}
+
+// insert events in chunks
+const CHUNK = 5000;
+for (let i = 0; i < ready.length; i += CHUNK) {
+  const chunk = ready.slice(i, i + CHUNK);
+  const { error } = await supa.from('events').insert(chunk);
+  if (error) { await note(`events insert err`); throw error; }
+}
+totalEvents += ready.length;
+
+      // 6) metrics
+      await note(`encounter ${fIdx + 1}: metrics`);
+      const startMs = toMs(fight.start) ?? Date.now();
+      const endMs   = toMs(fight.end) ?? startMs;
+      const durSec  = Math.max(1, Math.round((endMs - startMs) / 1000));
+
+      const { data: sums, error: sumsErr } = await supa
+        .from("events")
+        .select("actor_id, amount")
+        .eq("encounter_id", encounter_id)
+        .eq("type", "dmg");
+      if (sumsErr) { await note(`metrics select err`); throw sumsErr; }
+
+      const totals = new Map<string, number>();
+      for (const r of sums || []) {
+        if (!r.actor_id) continue;
+        totals.set(r.actor_id, (totals.get(r.actor_id) || 0) + (r.amount || 0));
       }
 
-      encounterIds.push(enc.id);
+      const metricsRows = Array.from(totals, ([actor_id, total]) => ({
+        encounter_id, actor_id, dps: total / durSec, hps: 0, deaths: 0, uptime: 0,
+      }));
+      if (metricsRows.length) {
+        const { error: upErr } = await supa.from("metrics").upsert(metricsRows);
+        if (upErr) { await note(`metrics upsert err`); throw upErr; }
+      }
+      encounterIds.push(encounter_id);
     }
 
-    await supa.from("uploads").update({ status: "complete" }).eq("id", upload_id);
+    const finalNote = `parsed fights=${fights.length} encounters=${totalEncounters} actors≈${totalActors} events=${totalEvents}`;
+    await note(finalNote);
+    await supa.from("uploads").update({ status: "complete" }).eq("id", _uploadId);
 
-    return new Response(JSON.stringify({ ok: true, encounters: encounterIds }), { status: 200, headers: corsHeaders });
+    // Return encounter IDs so the client can navigate immediately
+    return new Response(
+      JSON.stringify({ ok: true, note: finalNote, encounter_ids: encounterIds }),
+      { status: 200, headers: corsHeaders },
+    );
+
   } catch (e: any) {
-    return new Response(JSON.stringify({ error: String(e?.message || e) }), { status: 500, headers: corsHeaders });
+    await note(`ERR: ${String(e?.message || e)}`);
+    return new Response(JSON.stringify({ error: String(e?.message || e) }), {
+      status: 500,
+      headers: corsHeaders,
+    });
   }
 });
+

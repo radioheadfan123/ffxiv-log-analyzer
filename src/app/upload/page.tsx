@@ -1,59 +1,166 @@
 'use client';
+
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
+import { ensureUser } from '@/lib/auth';
 
-export default function UploadPage() {
-  const [file, setFile] = useState<File | null>(null);
-  const [msg, setMsg] = useState('');
-
-const ensureUser = async () => {
-  const g1 = await supabase.auth.getUser();
-  if (g1.data.user) return g1.data.user;
-
-  const { error } = await supabase.auth.signInAnonymously();
-  if (error) throw error;
-
-  const g2 = await supabase.auth.getUser();
-  if (!g2.data.user) throw new Error('Anon sign-in failed. Check Supabase → Auth → Anonymous is enabled.');
-  return g2.data.user;
+type Encounter = {
+  id: string;
+  boss: string | null;
+  duty: string | null;
+  start_ts: string | null;
+  end_ts: string | null;
 };
 
-  const onUpload = async () => {
+export default function UploadPage() {
+  const [msg, setMsg] = useState<string>('');
+  const [encounters, setEncounters] = useState<Encounter[]>([]);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setMsg('');
+    setEncounters([]);
+    setLoading(true);
+
     try {
-      if (!file) return setMsg('choose a file first');
+      // 1) Make sure we have a session
       const user = await ensureUser();
+      if (!user) {
+        setMsg('Authentication failed.');
+        setLoading(false);
+        return;
+      }
 
-      await supabase.from('users').upsert({ id: user.id, email: user.email ?? null });
-
+      // 2) Create a signed upload URL and upload the file
       const path = `${user.id}/${Date.now()}_${file.name}`;
-      const up = await supabase.storage.from('logs').upload(path, file, { upsert: false });
-      if (up.error) return setMsg(`upload error: ${up.error.message}`);
 
-const ins = await supabase.from('uploads')
-  .insert({ user_id: user.id, path, status: 'queued' })
-  .select('id').single();
-if (ins.error) return setMsg(`db error: ${ins.error.message}`);
+      const { data: signed, error: signErr } = await supabase
+        .storage.from('logs')
+        .createSignedUploadUrl(path);
+      if (signErr || !signed) throw new Error(`Signed URL error: ${signErr?.message ?? 'unknown'}`);
 
-// call the edge function
-const fn = await supabase.functions.invoke('parse-log', {
-  body: { upload_id: ins.data.id, path }
-});
-if ((fn as any).error) return setMsg(`parse start error: ${(fn as any).error.message}`);
+      const { error: upErr } = await supabase
+        .storage.from('logs')
+        .uploadToSignedUrl(path, signed.token, file);
+      if (upErr) throw new Error(`Upload error: ${upErr.message}`);
 
-setMsg(`uploaded ✓ parsing…`);
-    } catch (e:any) {
-      setMsg(String(e?.message || e));
+      // 3) Insert upload record
+      const { data: ins, error: insErr } = await supabase
+        .from('uploads')
+        .insert({ user_id: user.id, path, status: 'uploaded' })
+        .select('id')
+        .single();
+      if (insErr || !ins) throw new Error(`DB insert error: ${insErr?.message ?? 'unknown'}`);
+
+      setMsg('Uploaded ✓ Parsing…');
+
+      // 4) Invoke the parser
+      const fn = await supabase.functions.invoke('parse-log', {
+        body: { upload_id: ins.id, path },
+      });
+
+      if ((fn as any).error) {
+        throw new Error(`Edge error: ${(fn as any).error.message}`);
+      }
+
+      const ids: string[] =
+        (fn.data as any)?.encounter_ids ??
+        (fn.data as any)?.encounters ??
+        (fn.data as any)?.ids ??
+        [];
+
+      if (ids.length === 0) {
+        setMsg('Parsed, but no encounters with data were found.');
+        setLoading(false);
+        return;
+      }
+
+      if (ids.length === 1) {
+        // Single encounter → navigate immediately
+        router.push(`/encounter/${ids[0]}`);
+        return;
+      }
+
+      // 5) Multiple encounters → fetch metadata and show a picker
+      const { data: encs, error: encErr } = await supabase
+        .from('encounters')
+        .select('id,boss,duty,start_ts,end_ts')
+        .in('id', ids);
+      if (encErr) throw new Error(`Load encounters error: ${encErr.message}`);
+
+      // Sort by start time descending for convenience
+      const sorted = (encs ?? []).sort((a, b) => {
+        const ta = a.start_ts ? new Date(a.start_ts).getTime() : 0;
+        const tb = b.start_ts ? new Date(b.start_ts).getTime() : 0;
+        return tb - ta;
+      });
+
+      setEncounters(sorted as Encounter[]);
+      setMsg(`Select an encounter (${sorted.length} found)`);
+    } catch (err: any) {
+      setMsg(err?.message ?? String(err));
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="p-6 max-w-xl">
-      <h1 className="text-xl mb-3">Upload ACT Log</h1>
-      <input type="file" accept=".log,.txt,.csv" onChange={(e)=>setFile(e.target.files?.[0] ?? null)} />
-      <button className="mt-3 px-3 py-2 rounded bg-black text-white" onClick={onUpload}>
-        Upload
-      </button>
-      <div className="mt-3 text-sm">{msg}</div>
+    <div className="p-6 max-w-3xl">
+      <h1 className="text-xl mb-4">Upload ACT Log</h1>
+
+      <input
+        type="file"
+        accept=".log,.csv,.txt"
+        onChange={handleUpload}
+        disabled={loading}
+        className="block"
+      />
+
+      {msg && <p className="mt-4 text-sm">{msg}</p>}
+
+      {encounters.length > 0 && (
+        <div className="mt-6 space-y-2">
+          {encounters.map((e) => {
+            const start = e.start_ts ? new Date(e.start_ts) : null;
+            const end = e.end_ts ? new Date(e.end_ts) : null;
+            const dur =
+              start && end ? Math.max(1, Math.round((+end - +start) / 1000)) : null;
+            return (
+              <a
+                key={e.id}
+                href={`/encounter/${e.id}`}
+                className="block rounded-xl border p-3 hover:bg-zinc-50"
+              >
+                <div className="font-medium">
+                  {e.boss || 'Unknown Boss'}{' '}
+                  <span className="text-zinc-500">({e.duty || 'Unknown Duty'})</span>
+                </div>
+                <div className="text-xs text-zinc-500">
+                  {start ? start.toLocaleString() : '—'}
+                  {dur ? ` • ${dur}s` : ''}
+                </div>
+              </a>
+            );
+          })}
+        </div>
+      )}
+
+      {encounters.length > 0 && (
+        <button
+          className="mt-4 rounded-lg border px-3 py-1 text-sm"
+          onClick={() => {
+            setEncounters([]);
+            setMsg('');
+          }}
+        >
+          Upload another file
+        </button>
+      )}
     </div>
   );
 }
