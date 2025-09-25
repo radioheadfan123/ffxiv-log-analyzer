@@ -4,11 +4,11 @@ This guide explains how the enhanced FFXIV log parser works with comprehensive a
 
 ## Overview
 
-The parser has been enhanced to provide:
+The parser provides:
 - **Comprehensive actor classification** using damage heuristics and job data
 - **Structured JSONB storage** for boss, adds, and party member data  
 - **Enhanced job detection** using the complete FFXIV job database
-- **Backward compatibility** with existing string-based encounter data
+- **Clean schema design** using only current standardized fields
 
 ## Parser Architecture
 
@@ -40,32 +40,34 @@ console.log(`Loaded ${allJobs.length} job definitions for actor classification`)
 ### JSONB Schema Structure
 
 ```typescript
-// Encounters table new columns:
+// Encounters table schema:
 interface EncounterData {
-  // Legacy string fields (maintained for compatibility)
-  boss_legacy?: string;   // "Titan" (legacy field)
-  duty: string;           // "The Navel (Extreme)"
+  id: string;               // Unique encounter identifier
+  upload_id: string;        // Reference to upload record
+  duty: string;             // "The Navel (Extreme)"
+  start_ts: string;         // ISO timestamp of encounter start
+  end_ts: string;           // ISO timestamp of encounter end
   
-  // New JSONB fields  
-  boss: {                 // Single boss object (JSONB)
-    name: string;         // "Titan"
-    job?: string;         // null for NPCs
-    role?: string;        // null for NPCs  
-    id?: string;          // database actor ID
+  // JSONB fields  
+  boss: {                   // Single boss object (JSONB)
+    name: string;           // "Titan"
+    job?: string;           // null for NPCs
+    role?: string;          // null for NPCs  
+    id?: string;            // database actor ID
   } | null;
   
-  adds: Array<{           // Array of add/mob objects
-    name: string;         // "Granite Gaol"
-    job?: string;         // null for NPCs
-    role?: string;        // null for NPCs
-    id?: string;          // database actor ID
+  adds: Array<{             // Array of add/mob objects
+    name: string;           // "Granite Gaol"
+    job?: string;           // null for NPCs
+    role?: string;          // null for NPCs
+    id?: string;            // database actor ID
   }>;
   
-  party_members: Array<{  // Array of player objects
-    name: string;         // "John Doe"
-    job?: string;         // "PLD"
-    role?: string;        // "tank"
-    id?: string;          // database actor ID
+  party_members: Array<{    // Array of player objects
+    name: string;           // "John Doe"
+    job?: string;           // "PLD"
+    role?: string;          // "tank"
+    id?: string;            // database actor ID
   }>;
 }
 ```
@@ -103,13 +105,20 @@ Adds (additional monsters/NPCs) are classified as:
 
 ## Database Migration
 
-Run the migration to add JSONB columns:
+The current schema uses JSONB columns for structured data:
 
 ```sql
--- supabase/migrations/001_add_jsonb_columns.sql
-ALTER TABLE encounters ADD COLUMN IF NOT EXISTS boss JSONB;
-ALTER TABLE encounters ADD COLUMN IF NOT EXISTS adds JSONB[];
-ALTER TABLE encounters ADD COLUMN IF NOT EXISTS party_members JSONB[];
+-- Core encounter table structure
+CREATE TABLE encounters (
+  id UUID PRIMARY KEY,
+  upload_id UUID REFERENCES uploads(id),
+  duty TEXT NOT NULL,
+  start_ts TIMESTAMPTZ,
+  end_ts TIMESTAMPTZ,
+  boss JSONB,
+  adds JSONB[],
+  party_members JSONB[]
+);
 ```
 
 ## Querying JSONB Data
@@ -151,7 +160,7 @@ GROUP BY boss->>'name', jsonb_array_length(party_members);
 ## Performance Considerations
 
 ### Indexes
-The migration includes performance indexes:
+The schema includes performance indexes:
 ```sql
 -- Fast boss name lookups
 CREATE INDEX idx_encounters_boss_name ON encounters USING GIN ((boss->>'name'));
@@ -164,29 +173,21 @@ CREATE INDEX idx_encounters_party_members ON encounters USING GIN (party_members
 - Job data is cached in memory for fast skill lookups
 - Actor classification results are computed once per encounter
 
-## Backward Compatibility
-
-The parser maintains full backward compatibility:
-
-1. **Legacy encounters** continue to work with string `boss_legacy` and `duty` fields
-2. **UI components** gracefully fallback to legacy data when JSONB is not available
-3. **Database queries** work with both old and new schemas
-
 ## Usage Examples
 
 ### Frontend Components
 ```typescript
 // Encounter list component
-const bossName = encounter.boss?.name || encounter.boss_legacy || 'Unknown Boss';
+const bossName = encounter.boss?.name || 'Unknown Boss';
 const partySize = encounter.party_members?.length || 0;
 ```
 
 ### API Queries
 ```typescript
-// Fetch encounters with JSONB data
+// Fetch encounters with structured data
 const { data } = await supabase
   .from('encounters')
-  .select('id,boss,boss_legacy,duty,adds,party_members')
+  .select('id,upload_id,boss,duty,adds,party_members,start_ts,end_ts')
   .order('start_ts', { ascending: false });
 ```
 
@@ -194,8 +195,8 @@ const { data } = await supabase
 
 ### Common Issues
 
-1. **JSONB columns not found**: Migration hasn't been run yet
-   - Solution: Parser gracefully handles this and uses legacy format
+1. **JSONB columns not found**: Database schema needs to be up to date
+   - Solution: Ensure all migrations have been applied correctly
 
 2. **Job detection failing**: Actor uses unrecognized skills
    - Solution: Parser falls back to "UNK" job and "dps" role defaults
