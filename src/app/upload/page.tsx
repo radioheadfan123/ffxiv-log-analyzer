@@ -7,12 +7,12 @@ import { ensureUser } from '@/lib/auth';
 
 type Encounter = {
   id: string;
+  upload_id: string;
   boss: { name: string; job?: string; role?: string } | null;
-  boss_legacy?: string | null;
   duty: string | null;
   start_ts: string | null;
   end_ts: string | null;
-  // JSONB fields
+  adds?: Array<{ name: string; job?: string; role?: string }> | null;
   party_members?: Array<{ name: string; job?: string; role?: string }> | null;
 };
 
@@ -93,7 +93,7 @@ export default function UploadPage() {
       // 5) Multiple encounters → fetch metadata and show a picker
       const { data: encs, error: encErr } = await supabase
         .from('encounters')
-        .select('id,boss,boss_legacy,duty,start_ts,end_ts,party_members')
+        .select('id,upload_id,boss,duty,start_ts,end_ts,adds,party_members')
         .in('id', ids);
       if (encErr) throw new Error(`Load encounters error: ${encErr.message}`);
 
@@ -136,8 +136,7 @@ export default function UploadPage() {
             const dur =
               start && end ? Math.max(1, Math.round((+end - +start) / 1000)) : null;
             
-            // Use JSONB boss data if available, fallback to legacy string boss
-            const bossName = e.boss?.name || e.boss_legacy || 'Unknown Boss';
+            const bossName = e.boss?.name || 'Unknown Boss';
             const partySize = e.party_members?.length || 0;
             
             return (
