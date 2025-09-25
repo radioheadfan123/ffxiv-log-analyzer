@@ -6,12 +6,12 @@ import { ensureUser } from '@/lib/auth';
 
 type Encounter = {
   id: string;
-  boss: string | null;
+  boss: { name: string; job?: string; role?: string } | null;
+  boss_legacy?: string | null;
   duty: string | null;
   start_ts: string | null;
   end_ts: string | null;
-  // New JSONB fields (may not exist in old schemas)
-  boss_data?: { name: string; job?: string; role?: string } | null;
+  // JSONB fields
   adds?: Array<{ name: string; job?: string; role?: string }> | null;
   party_members?: Array<{ name: string; job?: string; role?: string }> | null;
 };
@@ -32,7 +32,7 @@ export default function EncounterListPage() {
 
       const { data, error } = await supabase
         .from('encounters')
-        .select('id,boss,duty,start_ts,end_ts,boss_data,adds,party_members')
+        .select('id,boss,boss_legacy,duty,start_ts,end_ts,adds,party_members')
         .order('start_ts', { ascending: false })
         .limit(50);
 
@@ -61,8 +61,8 @@ export default function EncounterListPage() {
             const dur =
               start && end ? Math.max(1, Math.round((+end - +start) / 1000)) : null;
 
-            // Use JSONB boss data if available, fallback to string boss
-            const bossName = e.boss_data?.name || e.boss || 'Unknown Boss';
+            // Use JSONB boss data if available, fallback to legacy string boss
+            const bossName = e.boss?.name || e.boss_legacy || 'Unknown Boss';
             const partySize = e.party_members?.length || 0;
 
             return (

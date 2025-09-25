@@ -43,11 +43,11 @@ console.log(`Loaded ${allJobs.length} job definitions for actor classification`)
 // Encounters table new columns:
 interface EncounterData {
   // Legacy string fields (maintained for compatibility)
-  boss: string;           // "Titan"
+  boss_legacy?: string;   // "Titan" (legacy field)
   duty: string;           // "The Navel (Extreme)"
   
   // New JSONB fields  
-  boss_data: {            // Single boss object
+  boss: {                 // Single boss object (JSONB)
     name: string;         // "Titan"
     job?: string;         // null for NPCs
     role?: string;        // null for NPCs  
@@ -107,7 +107,7 @@ Run the migration to add JSONB columns:
 
 ```sql
 -- supabase/migrations/001_add_jsonb_columns.sql
-ALTER TABLE encounters ADD COLUMN IF NOT EXISTS boss_data JSONB;
+ALTER TABLE encounters ADD COLUMN IF NOT EXISTS boss JSONB;
 ALTER TABLE encounters ADD COLUMN IF NOT EXISTS adds JSONB[];
 ALTER TABLE encounters ADD COLUMN IF NOT EXISTS party_members JSONB[];
 ```
@@ -117,7 +117,7 @@ ALTER TABLE encounters ADD COLUMN IF NOT EXISTS party_members JSONB[];
 ### Find encounters by boss name:
 ```sql
 SELECT * FROM encounters 
-WHERE boss_data->>'name' = 'Titan';
+WHERE boss->>'name' = 'Titan';
 ```
 
 ### Find encounters with specific party size:
@@ -140,12 +140,12 @@ WHERE party_members @> '[{"role": "tank"}]';
 
 -- Count encounters by party job distribution
 SELECT 
-  boss_data->>'name' as boss_name,
+  boss->>'name' as boss_name,
   jsonb_array_length(party_members) as party_size,
   COUNT(*) as encounter_count
 FROM encounters 
-WHERE boss_data IS NOT NULL
-GROUP BY boss_data->>'name', jsonb_array_length(party_members);
+WHERE boss IS NOT NULL
+GROUP BY boss->>'name', jsonb_array_length(party_members);
 ```
 
 ## Performance Considerations
@@ -154,7 +154,7 @@ GROUP BY boss_data->>'name', jsonb_array_length(party_members);
 The migration includes performance indexes:
 ```sql
 -- Fast boss name lookups
-CREATE INDEX idx_encounters_boss_data_name ON encounters USING GIN ((boss_data->>'name'));
+CREATE INDEX idx_encounters_boss_name ON encounters USING GIN ((boss->>'name'));
 
 -- Fast party member queries  
 CREATE INDEX idx_encounters_party_members ON encounters USING GIN (party_members);
@@ -168,7 +168,7 @@ CREATE INDEX idx_encounters_party_members ON encounters USING GIN (party_members
 
 The parser maintains full backward compatibility:
 
-1. **Legacy encounters** continue to work with string `boss` and `duty` fields
+1. **Legacy encounters** continue to work with string `boss_legacy` and `duty` fields
 2. **UI components** gracefully fallback to legacy data when JSONB is not available
 3. **Database queries** work with both old and new schemas
 
@@ -177,7 +177,7 @@ The parser maintains full backward compatibility:
 ### Frontend Components
 ```typescript
 // Encounter list component
-const bossName = encounter.boss_data?.name || encounter.boss || 'Unknown Boss';
+const bossName = encounter.boss?.name || encounter.boss_legacy || 'Unknown Boss';
 const partySize = encounter.party_members?.length || 0;
 ```
 
@@ -186,7 +186,7 @@ const partySize = encounter.party_members?.length || 0;
 // Fetch encounters with JSONB data
 const { data } = await supabase
   .from('encounters')
-  .select('id,boss,duty,boss_data,adds,party_members')
+  .select('id,boss,boss_legacy,duty,adds,party_members')
   .order('start_ts', { ascending: false });
 ```
 

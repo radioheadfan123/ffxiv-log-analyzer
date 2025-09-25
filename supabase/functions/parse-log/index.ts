@@ -121,7 +121,7 @@ Deno.serve(async (req) => {
       // 1) create encounter
       const { data: enc, error: encErr } = await supa
         .from("encounters")
-        .insert({ upload_id, duty: "Unknown Duty", boss: "Unknown", start_ts: fight.start, end_ts: fight.end })
+        .insert({ upload_id, duty: "Unknown Duty", boss_legacy: "Unknown", start_ts: fight.start, end_ts: fight.end })
         .select("id")
         .single();
       if (encErr) { await note(`encounter insert err`); throw encErr; }
@@ -224,19 +224,11 @@ Deno.serve(async (req) => {
       // Update encounter with structured data
       const encounterUpdateData: Record<string, unknown> = {
         duty: dutyName,
-        boss: bossName // Keep string for backward compatibility
+        boss_legacy: bossName, // Keep string for backward compatibility
+        boss: bossData, // New JSONB boss field
+        adds: addsData,
+        party_members: partyData
       };
-
-      // Add JSONB columns if they exist in the schema
-      // This allows the code to work with both old and new schemas
-      try {
-        encounterUpdateData.boss_data = bossData;
-        encounterUpdateData.adds = addsData;
-        encounterUpdateData.party_members = partyData;
-      } catch {
-        // If JSONB columns don't exist yet, just use the string boss field
-        console.log("JSONB columns not yet available, using legacy format");
-      }
 
       await supa.from("encounters").update(encounterUpdateData).eq("id", encounter_id);
 
