@@ -1,0 +1,128 @@
+{
+  "id": 32,
+  "abbreviation": "DRK",
+  "name": "Dark Knight",
+  "role": "tank",
+  "skills": [
+    {
+      "id": 3617,
+      "name": "Hard Slash",
+      "potency": 200,
+      "type": "damage"
+    },
+    {
+      "id": 3619,
+      "name": "Syphon Strike",
+      "potency": 300,
+      "type": "damage"
+    },
+    {
+      "id": 3621,
+      "name": "Souleater",
+      "potency": 400,
+      "type": "damage"
+    },
+    {
+      "id": 3623,
+      "name": "Unleash",
+      "potency": 120,
+      "type": "damage"
+    },
+    {
+      "id": 3624,
+      "name": "Grit",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 3625,
+      "name": "Unmend",
+      "potency": 150,
+      "type": "damage"
+    },
+    {
+      "id": 3629,
+      "name": "Dark Side",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 3632,
+      "name": "Shadow Wall",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 3634,
+      "name": "Living Dead",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 3635,
+      "name": "Salted Earth",
+      "potency": 50,
+      "type": "damage"
+    },
+    {
+      "id": 3636,
+      "name": "Plunge",
+      "potency": 200,
+      "type": "damage"
+    },
+    {
+      "id": 3638,
+      "name": "Abyssal Drain",
+      "potency": 200,
+      "type": "damage"
+    },
+    {
+      "id": 3639,
+      "name": "Carve and Spit",
+      "potency": 510,
+      "type": "damage"
+    },
+    {
+      "id": 7390,
+      "name": "Bloodspiller",
+      "potency": 580,
+      "type": "damage"
+    },
+    {
+      "id": 7391,
+      "name": "Quietus",
+      "potency": 200,
+      "type": "damage"
+    },
+    {
+      "id": 7393,
+      "name": "Blackest Night",
+      "potency": 0,
+      "type": "shield"
+    },
+    {
+      "id": 16466,
+      "name": "Flood of Darkness",
+      "potency": 160,
+      "type": "damage"
+    },
+    {
+      "id": 16467,
+      "name": "Edge of Darkness",
+      "potency": 460,
+      "type": "damage"
+    },
+    {
+      "id": 16468,
+      "name": "Dark Missionary",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 25754,
+      "name": "Living Shadow",
+      "potency": 0,
+      "type": "buff"
+    }
+  ]
+}

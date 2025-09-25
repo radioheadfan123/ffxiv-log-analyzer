@@ -1,0 +1,128 @@
+{
+  "id": 21,
+  "abbreviation": "WAR",
+  "name": "Warrior",
+  "role": "tank",
+  "skills": [
+    {
+      "id": 31,
+      "name": "Heavy Swing",
+      "potency": 200,
+      "type": "damage"
+    },
+    {
+      "id": 32,
+      "name": "Maim",
+      "potency": 300,
+      "type": "damage"
+    },
+    {
+      "id": 33,
+      "name": "Berserk",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 35,
+      "name": "Overpower",
+      "potency": 130,
+      "type": "damage"
+    },
+    {
+      "id": 36,
+      "name": "Tomahawk",
+      "potency": 100,
+      "type": "damage"
+    },
+    {
+      "id": 37,
+      "name": "Storm's Path",
+      "potency": 400,
+      "type": "damage"
+    },
+    {
+      "id": 42,
+      "name": "Thrill of Battle",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 44,
+      "name": "Defiance",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 45,
+      "name": "Storm's Eye",
+      "potency": 400,
+      "type": "damage"
+    },
+    {
+      "id": 48,
+      "name": "Infuriate",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 49,
+      "name": "Fell Cleave",
+      "potency": 590,
+      "type": "damage"
+    },
+    {
+      "id": 52,
+      "name": "Inner Beast",
+      "potency": 350,
+      "type": "damage"
+    },
+    {
+      "id": 3552,
+      "name": "Steel Cyclone",
+      "potency": 200,
+      "type": "damage"
+    },
+    {
+      "id": 3553,
+      "name": "Decimate",
+      "potency": 200,
+      "type": "damage"
+    },
+    {
+      "id": 7387,
+      "name": "Raw Intuition",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 7389,
+      "name": "Equilibrium",
+      "potency": 1200,
+      "type": "heal"
+    },
+    {
+      "id": 16464,
+      "name": "Upheaval",
+      "potency": 400,
+      "type": "damage"
+    },
+    {
+      "id": 16465,
+      "name": "Onslaught",
+      "potency": 150,
+      "type": "damage"
+    },
+    {
+      "id": 16469,
+      "name": "Inner Release",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 25771,
+      "name": "Nascent Flash",
+      "potency": 0,
+      "type": "buff"
+    }
+  ]
+}

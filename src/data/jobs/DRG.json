@@ -1,0 +1,140 @@
+{
+  "id": 22,
+  "abbreviation": "DRG",
+  "name": "Dragoon",
+  "role": "dps",
+  "skills": [
+    {
+      "id": 75,
+      "name": "True Thrust",
+      "potency": 230,
+      "type": "damage"
+    },
+    {
+      "id": 78,
+      "name": "Vorpal Thrust",
+      "potency": 350,
+      "type": "damage"
+    },
+    {
+      "id": 79,
+      "name": "Life Surge",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 84,
+      "name": "Full Thrust",
+      "potency": 530,
+      "type": "damage"
+    },
+    {
+      "id": 85,
+      "name": "Pierce",
+      "potency": 150,
+      "type": "damage"
+    },
+    {
+      "id": 86,
+      "name": "Disembowel",
+      "potency": 320,
+      "type": "damage"
+    },
+    {
+      "id": 87,
+      "name": "Chaos Thrust",
+      "potency": 300,
+      "type": "damage"
+    },
+    {
+      "id": 88,
+      "name": "Heavy Thrust",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 90,
+      "name": "Jump",
+      "potency": 320,
+      "type": "damage"
+    },
+    {
+      "id": 92,
+      "name": "Spineshatter Dive",
+      "potency": 250,
+      "type": "damage"
+    },
+    {
+      "id": 95,
+      "name": "Dragonfire Dive",
+      "potency": 300,
+      "type": "damage"
+    },
+    {
+      "id": 96,
+      "name": "Blood for Blood",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 3554,
+      "name": "Doom Spike",
+      "potency": 110,
+      "type": "damage"
+    },
+    {
+      "id": 3555,
+      "name": "Phlebotomize",
+      "potency": 170,
+      "type": "damage"
+    },
+    {
+      "id": 3556,
+      "name": "Leg Sweep",
+      "potency": 130,
+      "type": "damage"
+    },
+    {
+      "id": 3557,
+      "name": "Power Surge",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 3559,
+      "name": "Fang and Claw",
+      "potency": 460,
+      "type": "damage"
+    },
+    {
+      "id": 3560,
+      "name": "Wheeling Thrust",
+      "potency": 460,
+      "type": "damage"
+    },
+    {
+      "id": 7395,
+      "name": "Geirskogul",
+      "potency": 280,
+      "type": "damage"
+    },
+    {
+      "id": 16477,
+      "name": "Mirage Dive",
+      "potency": 200,
+      "type": "damage"
+    },
+    {
+      "id": 16478,
+      "name": "Nastrond",
+      "potency": 360,
+      "type": "damage"
+    },
+    {
+      "id": 25770,
+      "name": "Coerthan Torment",
+      "potency": 150,
+      "type": "damage"
+    }
+  ]
+}

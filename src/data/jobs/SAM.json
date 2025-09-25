@@ -1,0 +1,134 @@
+{
+  "id": 34,
+  "abbreviation": "SAM",
+  "name": "Samurai",
+  "role": "dps",
+  "skills": [
+    {
+      "id": 7477,
+      "name": "Hakaze",
+      "potency": 200,
+      "type": "damage"
+    },
+    {
+      "id": 7478,
+      "name": "Jinpu",
+      "potency": 120,
+      "type": "damage"
+    },
+    {
+      "id": 7479,
+      "name": "Shifu",
+      "potency": 120,
+      "type": "damage"
+    },
+    {
+      "id": 7480,
+      "name": "Yukikaze",
+      "potency": 340,
+      "type": "damage"
+    },
+    {
+      "id": 7481,
+      "name": "Gekko",
+      "potency": 370,
+      "type": "damage"
+    },
+    {
+      "id": 7482,
+      "name": "Kasha",
+      "potency": 370,
+      "type": "damage"
+    },
+    {
+      "id": 7483,
+      "name": "Fuga",
+      "potency": 100,
+      "type": "damage"
+    },
+    {
+      "id": 7484,
+      "name": "Mangetsu",
+      "potency": 120,
+      "type": "damage"
+    },
+    {
+      "id": 7485,
+      "name": "Oka",
+      "potency": 120,
+      "type": "damage"
+    },
+    {
+      "id": 7486,
+      "name": "Enpi",
+      "potency": 100,
+      "type": "damage"
+    },
+    {
+      "id": 7487,
+      "name": "Iaijutsu",
+      "potency": 0,
+      "type": "other"
+    },
+    {
+      "id": 7488,
+      "name": "Higanbana",
+      "potency": 200,
+      "type": "damage"
+    },
+    {
+      "id": 7489,
+      "name": "Tenka Goken",
+      "potency": 300,
+      "type": "damage"
+    },
+    {
+      "id": 7490,
+      "name": "Midare Setsugekka",
+      "potency": 720,
+      "type": "damage"
+    },
+    {
+      "id": 7491,
+      "name": "Meikyo Shisui",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 7492,
+      "name": "Hissatsu: Kaiten",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 7494,
+      "name": "Hissatsu: Shinten",
+      "potency": 250,
+      "type": "damage"
+    },
+    {
+      "id": 7495,
+      "name": "Hissatsu: Kyuten",
+      "potency": 120,
+      "type": "damage"
+    },
+    {
+      "id": 7496,
+      "name": "Hissatsu: Guren",
+      "potency": 500,
+      "type": "damage"
+    },
+    {
+      "id": 16481,
+      "name": "Hissatsu: Senei",
+      "potency": 800,
+      "type": "damage"
+    },
+    {
+      "id": 25780,
+      "name": "Tsubame-gaeshi",
+      "potency": 720,
+      "type": "damage"
+    }
+  ]
+}

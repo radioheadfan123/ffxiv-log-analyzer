@@ -1,0 +1,146 @@
+{
+  "id": 40,
+  "abbreviation": "SGE",
+  "name": "Sage",
+  "role": "healer",
+  "skills": [
+    {
+      "id": 24283,
+      "name": "Dosis",
+      "potency": 330,
+      "type": "damage"
+    },
+    {
+      "id": 24284,
+      "name": "Diagnosis",
+      "potency": 450,
+      "type": "shield"
+    },
+    {
+      "id": 24285,
+      "name": "Kardia",
+      "potency": 170,
+      "type": "heal"
+    },
+    {
+      "id": 24286,
+      "name": "Prognosis",
+      "potency": 300,
+      "type": "shield"
+    },
+    {
+      "id": 24287,
+      "name": "Phlegma",
+      "potency": 510,
+      "type": "damage"
+    },
+    {
+      "id": 24288,
+      "name": "Eukrasian Diagnosis",
+      "potency": 300,
+      "type": "shield"
+    },
+    {
+      "id": 24289,
+      "name": "Eukrasian Prognosis",
+      "potency": 100,
+      "type": "shield"
+    },
+    {
+      "id": 24290,
+      "name": "Egeiro",
+      "potency": 0,
+      "type": "other"
+    },
+    {
+      "id": 24291,
+      "name": "Druochole",
+      "potency": 600,
+      "type": "heal"
+    },
+    {
+      "id": 24292,
+      "name": "Kerachole",
+      "potency": 100,
+      "type": "heal"
+    },
+    {
+      "id": 24293,
+      "name": "Ixochole",
+      "potency": 400,
+      "type": "heal"
+    },
+    {
+      "id": 24294,
+      "name": "Zoe",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 24295,
+      "name": "Taurochole",
+      "potency": 700,
+      "type": "heal"
+    },
+    {
+      "id": 24296,
+      "name": "Toxikon",
+      "potency": 330,
+      "type": "damage"
+    },
+    {
+      "id": 24297,
+      "name": "Haima",
+      "potency": 300,
+      "type": "shield"
+    },
+    {
+      "id": 24298,
+      "name": "Phlegma II",
+      "potency": 510,
+      "type": "damage"
+    },
+    {
+      "id": 24299,
+      "name": "Dosis II",
+      "potency": 330,
+      "type": "damage"
+    },
+    {
+      "id": 24300,
+      "name": "Rhizomata",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 24301,
+      "name": "Holos",
+      "potency": 300,
+      "type": "heal"
+    },
+    {
+      "id": 24302,
+      "name": "Panhaima",
+      "potency": 200,
+      "type": "shield"
+    },
+    {
+      "id": 24303,
+      "name": "Phlegma III",
+      "potency": 510,
+      "type": "damage"
+    },
+    {
+      "id": 24304,
+      "name": "Dosis III",
+      "potency": 330,
+      "type": "damage"
+    },
+    {
+      "id": 24305,
+      "name": "Pneuma",
+      "potency": 330,
+      "type": "heal"
+    }
+  ]
+}

@@ -1,0 +1,140 @@
+{
+  "id": 20,
+  "abbreviation": "MNK",
+  "name": "Monk",
+  "role": "dps",
+  "skills": [
+    {
+      "id": 53,
+      "name": "Bootshine",
+      "potency": 200,
+      "type": "damage"
+    },
+    {
+      "id": 54,
+      "name": "True Strike",
+      "potency": 300,
+      "type": "damage"
+    },
+    {
+      "id": 56,
+      "name": "Snap Punch",
+      "potency": 250,
+      "type": "damage"
+    },
+    {
+      "id": 61,
+      "name": "Second Wind",
+      "potency": 500,
+      "type": "heal"
+    },
+    {
+      "id": 62,
+      "name": "Internal Release",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 63,
+      "name": "Haymaker",
+      "potency": 210,
+      "type": "damage"
+    },
+    {
+      "id": 65,
+      "name": "Featherfoot",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 66,
+      "name": "Twin Snakes",
+      "potency": 280,
+      "type": "damage"
+    },
+    {
+      "id": 69,
+      "name": "Demolish",
+      "potency": 130,
+      "type": "damage"
+    },
+    {
+      "id": 70,
+      "name": "Mantra",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 71,
+      "name": "Dragon Kick",
+      "potency": 320,
+      "type": "damage"
+    },
+    {
+      "id": 74,
+      "name": "Shoulder Tackle",
+      "potency": 100,
+      "type": "damage"
+    },
+    {
+      "id": 3543,
+      "name": "Arm of the Destroyer",
+      "potency": 110,
+      "type": "damage"
+    },
+    {
+      "id": 3545,
+      "name": "Rockbreaker",
+      "potency": 130,
+      "type": "damage"
+    },
+    {
+      "id": 3547,
+      "name": "Meditation",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 3549,
+      "name": "Steel Peak",
+      "potency": 180,
+      "type": "damage"
+    },
+    {
+      "id": 7394,
+      "name": "The Forbidden Chakra",
+      "potency": 340,
+      "type": "damage"
+    },
+    {
+      "id": 16473,
+      "name": "Riddle of Earth",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 16474,
+      "name": "Riddle of Fire",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 16475,
+      "name": "Brotherhood",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 25761,
+      "name": "Anatman",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 25762,
+      "name": "Riddle of Wind",
+      "potency": 0,
+      "type": "buff"
+    }
+  ]
+}

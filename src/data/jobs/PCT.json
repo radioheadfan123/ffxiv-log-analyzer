@@ -1,0 +1,128 @@
+{
+  "id": 42,
+  "abbreviation": "PCT",
+  "name": "Pictomancer",
+  "role": "dps",
+  "skills": [
+    {
+      "id": 34650,
+      "name": "Fire in Red",
+      "potency": 340,
+      "type": "damage"
+    },
+    {
+      "id": 34651,
+      "name": "Aero in Green",
+      "potency": 340,
+      "type": "damage"
+    },
+    {
+      "id": 34652,
+      "name": "Water in Blue",
+      "potency": 340,
+      "type": "damage"
+    },
+    {
+      "id": 34653,
+      "name": "Fire II in Red",
+      "potency": 120,
+      "type": "damage"
+    },
+    {
+      "id": 34654,
+      "name": "Aero II in Green",
+      "potency": 120,
+      "type": "damage"
+    },
+    {
+      "id": 34655,
+      "name": "Water II in Blue",
+      "potency": 120,
+      "type": "damage"
+    },
+    {
+      "id": 34656,
+      "name": "Blizzard in Cyan",
+      "potency": 800,
+      "type": "damage"
+    },
+    {
+      "id": 34657,
+      "name": "Stone in Yellow",
+      "potency": 800,
+      "type": "damage"
+    },
+    {
+      "id": 34658,
+      "name": "Thunder in Magenta",
+      "potency": 800,
+      "type": "damage"
+    },
+    {
+      "id": 34659,
+      "name": "Blizzard II in Cyan",
+      "potency": 280,
+      "type": "damage"
+    },
+    {
+      "id": 34660,
+      "name": "Stone II in Yellow",
+      "potency": 280,
+      "type": "damage"
+    },
+    {
+      "id": 34661,
+      "name": "Thunder II in Magenta",
+      "potency": 280,
+      "type": "damage"
+    },
+    {
+      "id": 34662,
+      "name": "Holy in White",
+      "potency": 500,
+      "type": "damage"
+    },
+    {
+      "id": 34663,
+      "name": "Comet in Black",
+      "potency": 500,
+      "type": "damage"
+    },
+    {
+      "id": 34664,
+      "name": "Pom Cure",
+      "potency": 300,
+      "type": "heal"
+    },
+    {
+      "id": 34665,
+      "name": "Pom Muse",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 34666,
+      "name": "Winged Muse",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 34667,
+      "name": "Mog of the Ages",
+      "potency": 1100,
+      "type": "damage"
+    },
+    {
+      "id": 34668,
+      "name": "Retribution of the Madeen",
+      "potency": 1400,
+      "type": "damage"
+    },
+    {
+      "id": 34669,
+      "name": "Star Prism",
+      "potency": 1400,
+      "type": "damage"
+    }
+  ]
+}

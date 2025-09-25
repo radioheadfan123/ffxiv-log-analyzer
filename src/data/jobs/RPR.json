@@ -1,0 +1,140 @@
+{
+  "id": 39,
+  "abbreviation": "RPR",
+  "name": "Reaper",
+  "role": "dps",
+  "skills": [
+    {
+      "id": 24373,
+      "name": "Slice",
+      "potency": 200,
+      "type": "damage"
+    },
+    {
+      "id": 24374,
+      "name": "Waxing Slice",
+      "potency": 300,
+      "type": "damage"
+    },
+    {
+      "id": 24375,
+      "name": "Infernal Slice",
+      "potency": 400,
+      "type": "damage"
+    },
+    {
+      "id": 24376,
+      "name": "Shadow of Death",
+      "potency": 300,
+      "type": "damage"
+    },
+    {
+      "id": 24378,
+      "name": "Harpe",
+      "potency": 300,
+      "type": "damage"
+    },
+    {
+      "id": 24379,
+      "name": "Hell's Ingress",
+      "potency": 0,
+      "type": "other"
+    },
+    {
+      "id": 24380,
+      "name": "Hell's Egress",
+      "potency": 0,
+      "type": "other"
+    },
+    {
+      "id": 24381,
+      "name": "Spinning Scythe",
+      "potency": 140,
+      "type": "damage"
+    },
+    {
+      "id": 24382,
+      "name": "Nightmare Scythe",
+      "potency": 180,
+      "type": "damage"
+    },
+    {
+      "id": 24383,
+      "name": "Whorl of Death",
+      "potency": 100,
+      "type": "damage"
+    },
+    {
+      "id": 24384,
+      "name": "Soul Slice",
+      "potency": 460,
+      "type": "damage"
+    },
+    {
+      "id": 24385,
+      "name": "Soul Scythe",
+      "potency": 180,
+      "type": "damage"
+    },
+    {
+      "id": 24386,
+      "name": "Gibbet",
+      "potency": 460,
+      "type": "damage"
+    },
+    {
+      "id": 24387,
+      "name": "Gallows",
+      "potency": 460,
+      "type": "damage"
+    },
+    {
+      "id": 24388,
+      "name": "Guillotine",
+      "potency": 200,
+      "type": "damage"
+    },
+    {
+      "id": 24389,
+      "name": "Blood Stalk",
+      "potency": 340,
+      "type": "damage"
+    },
+    {
+      "id": 24390,
+      "name": "Grim Swathe",
+      "potency": 140,
+      "type": "damage"
+    },
+    {
+      "id": 24391,
+      "name": "Gluttony",
+      "potency": 520,
+      "type": "damage"
+    },
+    {
+      "id": 24392,
+      "name": "Enshroud",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 24393,
+      "name": "Communio",
+      "potency": 1100,
+      "type": "damage"
+    },
+    {
+      "id": 24394,
+      "name": "Lemure's Slice",
+      "potency": 240,
+      "type": "damage"
+    },
+    {
+      "id": 24395,
+      "name": "Lemure's Scythe",
+      "potency": 100,
+      "type": "damage"
+    }
+  ]
+}

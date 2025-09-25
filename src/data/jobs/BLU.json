@@ -1,0 +1,140 @@
+{
+  "id": 36,
+  "abbreviation": "BLU",
+  "name": "Blue Mage",
+  "role": "dps",
+  "skills": [
+    {
+      "id": 11385,
+      "name": "Water Cannon",
+      "potency": 200,
+      "type": "damage"
+    },
+    {
+      "id": 11386,
+      "name": "Flame Thrower",
+      "potency": 220,
+      "type": "damage"
+    },
+    {
+      "id": 11387,
+      "name": "Aqua Breath",
+      "potency": 180,
+      "type": "damage"
+    },
+    {
+      "id": 11388,
+      "name": "Flying Sardine",
+      "potency": 10,
+      "type": "damage"
+    },
+    {
+      "id": 11389,
+      "name": "Drill Cannons",
+      "potency": 600,
+      "type": "damage"
+    },
+    {
+      "id": 11390,
+      "name": "High Voltage",
+      "potency": 400,
+      "type": "damage"
+    },
+    {
+      "id": 11391,
+      "name": "Loom",
+      "potency": 0,
+      "type": "other"
+    },
+    {
+      "id": 11392,
+      "name": "Final Sting",
+      "potency": 2000,
+      "type": "damage"
+    },
+    {
+      "id": 11393,
+      "name": "Song of Torment",
+      "potency": 50,
+      "type": "damage"
+    },
+    {
+      "id": 11394,
+      "name": "Glower",
+      "potency": 220,
+      "type": "damage"
+    },
+    {
+      "id": 11395,
+      "name": "Plaincracker",
+      "potency": 200,
+      "type": "damage"
+    },
+    {
+      "id": 11396,
+      "name": "Bristle",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 11397,
+      "name": "White Wind",
+      "potency": 0,
+      "type": "heal"
+    },
+    {
+      "id": 11398,
+      "name": "Level 5 Petrify",
+      "potency": 0,
+      "type": "debuff"
+    },
+    {
+      "id": 11399,
+      "name": "Sharpen Knife",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 11400,
+      "name": "Ice Spikes",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 11401,
+      "name": "Blood Drain",
+      "potency": 50,
+      "type": "damage"
+    },
+    {
+      "id": 11402,
+      "name": "Acorn Bomb",
+      "potency": 200,
+      "type": "damage"
+    },
+    {
+      "id": 11403,
+      "name": "Bomb Toss",
+      "potency": 200,
+      "type": "damage"
+    },
+    {
+      "id": 11404,
+      "name": "Off-guard",
+      "potency": 0,
+      "type": "debuff"
+    },
+    {
+      "id": 11405,
+      "name": "Self-destruct",
+      "potency": 1800,
+      "type": "damage"
+    },
+    {
+      "id": 11406,
+      "name": "Transfusion",
+      "potency": 0,
+      "type": "heal"
+    }
+  ]
+}

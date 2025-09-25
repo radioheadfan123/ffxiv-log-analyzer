@@ -1,0 +1,128 @@
+{
+  "id": 23,
+  "abbreviation": "BRD",
+  "name": "Bard",
+  "role": "dps",
+  "skills": [
+    {
+      "id": 97,
+      "name": "Heavy Shot",
+      "potency": 160,
+      "type": "damage"
+    },
+    {
+      "id": 98,
+      "name": "Straight Shot",
+      "potency": 140,
+      "type": "damage"
+    },
+    {
+      "id": 100,
+      "name": "Raging Strikes",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 101,
+      "name": "Venomous Bite",
+      "potency": 100,
+      "type": "damage"
+    },
+    {
+      "id": 106,
+      "name": "Quick Nock",
+      "potency": 110,
+      "type": "damage"
+    },
+    {
+      "id": 107,
+      "name": "Bloodletter",
+      "potency": 130,
+      "type": "damage"
+    },
+    {
+      "id": 108,
+      "name": "Windbite",
+      "potency": 60,
+      "type": "damage"
+    },
+    {
+      "id": 110,
+      "name": "Mage's Ballad",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 114,
+      "name": "Army's Paeon",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 116,
+      "name": "The Wanderer's Minuet",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 117,
+      "name": "Battle Voice",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 118,
+      "name": "Rain of Death",
+      "potency": 100,
+      "type": "damage"
+    },
+    {
+      "id": 3560,
+      "name": "Iron Jaws",
+      "potency": 100,
+      "type": "damage"
+    },
+    {
+      "id": 3561,
+      "name": "Sidewinder",
+      "potency": 320,
+      "type": "damage"
+    },
+    {
+      "id": 3562,
+      "name": "Pitch Perfect",
+      "potency": 100,
+      "type": "damage"
+    },
+    {
+      "id": 7409,
+      "name": "Caustic Bite",
+      "potency": 150,
+      "type": "damage"
+    },
+    {
+      "id": 7410,
+      "name": "Stormbite",
+      "potency": 100,
+      "type": "damage"
+    },
+    {
+      "id": 7411,
+      "name": "Refulgent Arrow",
+      "potency": 340,
+      "type": "damage"
+    },
+    {
+      "id": 16495,
+      "name": "Burst Shot",
+      "potency": 220,
+      "type": "damage"
+    },
+    {
+      "id": 25783,
+      "name": "Shadowbite",
+      "potency": 170,
+      "type": "damage"
+    }
+  ]
+}

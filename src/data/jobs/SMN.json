@@ -1,0 +1,140 @@
+{
+  "id": 27,
+  "abbreviation": "SMN",
+  "name": "Summoner",
+  "role": "dps",
+  "skills": [
+    {
+      "id": 163,
+      "name": "Ruin",
+      "potency": 180,
+      "type": "damage"
+    },
+    {
+      "id": 165,
+      "name": "Bio",
+      "potency": 20,
+      "type": "damage"
+    },
+    {
+      "id": 166,
+      "name": "Summon Carbuncle",
+      "potency": 0,
+      "type": "other"
+    },
+    {
+      "id": 169,
+      "name": "Aetherflow",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 170,
+      "name": "Energy Drain",
+      "potency": 100,
+      "type": "damage"
+    },
+    {
+      "id": 173,
+      "name": "Ruin II",
+      "potency": 160,
+      "type": "damage"
+    },
+    {
+      "id": 174,
+      "name": "Resurrection",
+      "potency": 0,
+      "type": "other"
+    },
+    {
+      "id": 180,
+      "name": "Summon",
+      "potency": 0,
+      "type": "other"
+    },
+    {
+      "id": 184,
+      "name": "Fester",
+      "potency": 300,
+      "type": "damage"
+    },
+    {
+      "id": 3579,
+      "name": "Ruin III",
+      "potency": 200,
+      "type": "damage"
+    },
+    {
+      "id": 3580,
+      "name": "Bio III",
+      "potency": 30,
+      "type": "damage"
+    },
+    {
+      "id": 3581,
+      "name": "Miasma III",
+      "potency": 20,
+      "type": "damage"
+    },
+    {
+      "id": 3582,
+      "name": "Bane",
+      "potency": 20,
+      "type": "damage"
+    },
+    {
+      "id": 7426,
+      "name": "Dreadwyrm Trance",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 7427,
+      "name": "Deathflare",
+      "potency": 400,
+      "type": "damage"
+    },
+    {
+      "id": 7428,
+      "name": "Ruin IV",
+      "potency": 430,
+      "type": "damage"
+    },
+    {
+      "id": 16510,
+      "name": "Bahamut",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 16511,
+      "name": "Enkindle Bahamut",
+      "potency": 800,
+      "type": "damage"
+    },
+    {
+      "id": 16513,
+      "name": "Wyrmwave",
+      "potency": 150,
+      "type": "damage"
+    },
+    {
+      "id": 25796,
+      "name": "Phoenix",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 25801,
+      "name": "Fountain of Fire",
+      "potency": 520,
+      "type": "damage"
+    },
+    {
+      "id": 25802,
+      "name": "Brand of Purgatory",
+      "potency": 240,
+      "type": "damage"
+    }
+  ]
+}

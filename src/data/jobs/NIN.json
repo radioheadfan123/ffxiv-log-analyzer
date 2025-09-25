@@ -1,0 +1,128 @@
+{
+  "id": 30,
+  "abbreviation": "NIN",
+  "name": "Ninja",
+  "role": "dps",
+  "skills": [
+    {
+      "id": 2240,
+      "name": "Spinning Edge",
+      "potency": 230,
+      "type": "damage"
+    },
+    {
+      "id": 2242,
+      "name": "Gust Slash",
+      "potency": 340,
+      "type": "damage"
+    },
+    {
+      "id": 2243,
+      "name": "Aeolian Edge",
+      "potency": 480,
+      "type": "damage"
+    },
+    {
+      "id": 2245,
+      "name": "Throwing Dagger",
+      "potency": 120,
+      "type": "damage"
+    },
+    {
+      "id": 2246,
+      "name": "Mug",
+      "potency": 140,
+      "type": "damage"
+    },
+    {
+      "id": 2247,
+      "name": "Hide",
+      "potency": 0,
+      "type": "other"
+    },
+    {
+      "id": 2248,
+      "name": "Assassinate",
+      "potency": 200,
+      "type": "damage"
+    },
+    {
+      "id": 2249,
+      "name": "Shukuchi",
+      "potency": 0,
+      "type": "other"
+    },
+    {
+      "id": 2254,
+      "name": "Death Blossom",
+      "potency": 120,
+      "type": "damage"
+    },
+    {
+      "id": 2255,
+      "name": "Mutilate",
+      "potency": 60,
+      "type": "damage"
+    },
+    {
+      "id": 2257,
+      "name": "Shadow Fang",
+      "potency": 200,
+      "type": "damage"
+    },
+    {
+      "id": 2258,
+      "name": "Trick Attack",
+      "potency": 500,
+      "type": "damage"
+    },
+    {
+      "id": 2259,
+      "name": "Ten",
+      "potency": 0,
+      "type": "other"
+    },
+    {
+      "id": 2260,
+      "name": "Chi",
+      "potency": 0,
+      "type": "other"
+    },
+    {
+      "id": 2261,
+      "name": "Jin",
+      "potency": 0,
+      "type": "other"
+    },
+    {
+      "id": 2263,
+      "name": "Fuma Shuriken",
+      "potency": 500,
+      "type": "damage"
+    },
+    {
+      "id": 2265,
+      "name": "Raiton",
+      "potency": 800,
+      "type": "damage"
+    },
+    {
+      "id": 2267,
+      "name": "Suiton",
+      "potency": 500,
+      "type": "damage"
+    },
+    {
+      "id": 16488,
+      "name": "Bhavacakra",
+      "potency": 350,
+      "type": "damage"
+    },
+    {
+      "id": 25776,
+      "name": "Bunshin",
+      "potency": 0,
+      "type": "buff"
+    }
+  ]
+}

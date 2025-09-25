@@ -1,0 +1,140 @@
+{
+  "id": 35,
+  "abbreviation": "RDM",
+  "name": "Red Mage",
+  "role": "dps",
+  "skills": [
+    {
+      "id": 7503,
+      "name": "Riposte",
+      "potency": 130,
+      "type": "damage"
+    },
+    {
+      "id": 7504,
+      "name": "Jolt",
+      "potency": 240,
+      "type": "damage"
+    },
+    {
+      "id": 7505,
+      "name": "Verthunder",
+      "potency": 350,
+      "type": "damage"
+    },
+    {
+      "id": 7506,
+      "name": "Corps-a-corps",
+      "potency": 130,
+      "type": "damage"
+    },
+    {
+      "id": 7507,
+      "name": "Vercure",
+      "potency": 350,
+      "type": "heal"
+    },
+    {
+      "id": 7508,
+      "name": "Veraero",
+      "potency": 350,
+      "type": "damage"
+    },
+    {
+      "id": 7509,
+      "name": "Scatter",
+      "potency": 100,
+      "type": "damage"
+    },
+    {
+      "id": 7510,
+      "name": "Verthunder II",
+      "potency": 120,
+      "type": "damage"
+    },
+    {
+      "id": 7511,
+      "name": "Veraero II",
+      "potency": 120,
+      "type": "damage"
+    },
+    {
+      "id": 7512,
+      "name": "Verfire",
+      "potency": 340,
+      "type": "damage"
+    },
+    {
+      "id": 7513,
+      "name": "Verstone",
+      "potency": 340,
+      "type": "damage"
+    },
+    {
+      "id": 7514,
+      "name": "Zwerchhau",
+      "potency": 150,
+      "type": "damage"
+    },
+    {
+      "id": 7515,
+      "name": "Displacement",
+      "potency": 130,
+      "type": "damage"
+    },
+    {
+      "id": 7516,
+      "name": "Fleche",
+      "potency": 460,
+      "type": "damage"
+    },
+    {
+      "id": 7517,
+      "name": "Redoublement",
+      "potency": 230,
+      "type": "damage"
+    },
+    {
+      "id": 7518,
+      "name": "Moulinet",
+      "potency": 60,
+      "type": "damage"
+    },
+    {
+      "id": 7519,
+      "name": "Verholy",
+      "potency": 550,
+      "type": "damage"
+    },
+    {
+      "id": 7520,
+      "name": "Verflare",
+      "potency": 550,
+      "type": "damage"
+    },
+    {
+      "id": 7521,
+      "name": "Jolt II",
+      "potency": 280,
+      "type": "damage"
+    },
+    {
+      "id": 16525,
+      "name": "Contre Sixte",
+      "potency": 380,
+      "type": "damage"
+    },
+    {
+      "id": 25855,
+      "name": "Scorch",
+      "potency": 700,
+      "type": "damage"
+    },
+    {
+      "id": 25858,
+      "name": "Resolution",
+      "potency": 750,
+      "type": "damage"
+    }
+  ]
+}

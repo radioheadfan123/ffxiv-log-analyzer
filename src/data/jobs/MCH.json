@@ -1,0 +1,128 @@
+{
+  "id": 31,
+  "abbreviation": "MCH",
+  "name": "Machinist",
+  "role": "dps",
+  "skills": [
+    {
+      "id": 2866,
+      "name": "Split Shot",
+      "potency": 200,
+      "type": "damage"
+    },
+    {
+      "id": 2868,
+      "name": "Slug Shot",
+      "potency": 300,
+      "type": "damage"
+    },
+    {
+      "id": 2870,
+      "name": "Clean Shot",
+      "potency": 400,
+      "type": "damage"
+    },
+    {
+      "id": 2872,
+      "name": "Hot Shot",
+      "potency": 300,
+      "type": "damage"
+    },
+    {
+      "id": 2873,
+      "name": "Lead Shot",
+      "potency": 100,
+      "type": "damage"
+    },
+    {
+      "id": 2874,
+      "name": "Spread Shot",
+      "potency": 180,
+      "type": "damage"
+    },
+    {
+      "id": 2876,
+      "name": "Reload",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 2878,
+      "name": "Quick Reload",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 2884,
+      "name": "Gauss Round",
+      "potency": 130,
+      "type": "damage"
+    },
+    {
+      "id": 2885,
+      "name": "Ricochet",
+      "potency": 130,
+      "type": "damage"
+    },
+    {
+      "id": 2889,
+      "name": "Wildfire",
+      "potency": 200,
+      "type": "damage"
+    },
+    {
+      "id": 7410,
+      "name": "Heated Split Shot",
+      "potency": 220,
+      "type": "damage"
+    },
+    {
+      "id": 7411,
+      "name": "Heated Slug Shot",
+      "potency": 340,
+      "type": "damage"
+    },
+    {
+      "id": 7412,
+      "name": "Heated Clean Shot",
+      "potency": 460,
+      "type": "damage"
+    },
+    {
+      "id": 16497,
+      "name": "Drill",
+      "potency": 600,
+      "type": "damage"
+    },
+    {
+      "id": 16498,
+      "name": "Bioblaster",
+      "potency": 50,
+      "type": "damage"
+    },
+    {
+      "id": 16499,
+      "name": "Air Anchor",
+      "potency": 700,
+      "type": "damage"
+    },
+    {
+      "id": 16500,
+      "name": "Automaton Queen",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 25786,
+      "name": "Reassemble",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 25788,
+      "name": "Hypercharge",
+      "potency": 0,
+      "type": "buff"
+    }
+  ]
+}

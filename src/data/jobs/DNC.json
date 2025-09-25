@@ -1,0 +1,128 @@
+{
+  "id": 38,
+  "abbreviation": "DNC",
+  "name": "Dancer",
+  "role": "dps",
+  "skills": [
+    {
+      "id": 15989,
+      "name": "Cascade",
+      "potency": 220,
+      "type": "damage"
+    },
+    {
+      "id": 15990,
+      "name": "Fountain",
+      "potency": 280,
+      "type": "damage"
+    },
+    {
+      "id": 15991,
+      "name": "Reverse Cascade",
+      "potency": 280,
+      "type": "damage"
+    },
+    {
+      "id": 15992,
+      "name": "Fountainfall",
+      "potency": 340,
+      "type": "damage"
+    },
+    {
+      "id": 15993,
+      "name": "Windmill",
+      "potency": 100,
+      "type": "damage"
+    },
+    {
+      "id": 15994,
+      "name": "Bladeshower",
+      "potency": 140,
+      "type": "damage"
+    },
+    {
+      "id": 15995,
+      "name": "Rising Windmill",
+      "potency": 140,
+      "type": "damage"
+    },
+    {
+      "id": 15996,
+      "name": "Bloodshower",
+      "potency": 180,
+      "type": "damage"
+    },
+    {
+      "id": 15997,
+      "name": "Standard Step",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 15998,
+      "name": "Technical Step",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 16003,
+      "name": "Standard Finish",
+      "potency": 360,
+      "type": "damage"
+    },
+    {
+      "id": 16004,
+      "name": "Technical Finish",
+      "potency": 540,
+      "type": "damage"
+    },
+    {
+      "id": 16005,
+      "name": "Fan Dance",
+      "potency": 150,
+      "type": "damage"
+    },
+    {
+      "id": 16006,
+      "name": "Fan Dance II",
+      "potency": 100,
+      "type": "damage"
+    },
+    {
+      "id": 16007,
+      "name": "Fan Dance III",
+      "potency": 200,
+      "type": "damage"
+    },
+    {
+      "id": 16008,
+      "name": "Saber Dance",
+      "potency": 480,
+      "type": "damage"
+    },
+    {
+      "id": 16009,
+      "name": "Closed Position",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 16010,
+      "name": "Devilment",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 16011,
+      "name": "Shield Samba",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 25789,
+      "name": "Flourish",
+      "potency": 0,
+      "type": "buff"
+    }
+  ]
+}

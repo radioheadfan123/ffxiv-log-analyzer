@@ -1,0 +1,128 @@
+{
+  "id": 19,
+  "abbreviation": "PLD",
+  "name": "Paladin",
+  "role": "tank",
+  "skills": [
+    {
+      "id": 9,
+      "name": "Fast Blade",
+      "potency": 200,
+      "type": "damage"
+    },
+    {
+      "id": 15,
+      "name": "Riot Blade",
+      "potency": 300,
+      "type": "damage"
+    },
+    {
+      "id": 21,
+      "name": "Rage of Halone",
+      "potency": 400,
+      "type": "damage"
+    },
+    {
+      "id": 24,
+      "name": "Shield Lob",
+      "potency": 100,
+      "type": "damage"
+    },
+    {
+      "id": 23,
+      "name": "Fight or Flight",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 20,
+      "name": "Shield Bash",
+      "potency": 100,
+      "type": "damage"
+    },
+    {
+      "id": 28,
+      "name": "Rampart",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 22,
+      "name": "Provoke",
+      "potency": 0,
+      "type": "other"
+    },
+    {
+      "id": 30,
+      "name": "Convalescence",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 17,
+      "name": "Sentinel",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 3541,
+      "name": "Royal Authority",
+      "potency": 400,
+      "type": "damage"
+    },
+    {
+      "id": 16160,
+      "name": "Holy Spirit",
+      "potency": 400,
+      "type": "damage"
+    },
+    {
+      "id": 16138,
+      "name": "Requiescat",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 7381,
+      "name": "Holy Circle",
+      "potency": 250,
+      "type": "damage"
+    },
+    {
+      "id": 25751,
+      "name": "Atonement",
+      "potency": 400,
+      "type": "damage"
+    },
+    {
+      "id": 16144,
+      "name": "Passage of Arms",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 25758,
+      "name": "Intervene",
+      "potency": 150,
+      "type": "damage"
+    },
+    {
+      "id": 16142,
+      "name": "Divine Veil",
+      "potency": 0,
+      "type": "shield"
+    },
+    {
+      "id": 16140,
+      "name": "Clemency",
+      "potency": 1200,
+      "type": "heal"
+    },
+    {
+      "id": 25746,
+      "name": "Goring Blade",
+      "potency": 700,
+      "type": "damage"
+    }
+  ]
+}

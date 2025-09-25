@@ -1,0 +1,128 @@
+{
+  "id": 37,
+  "abbreviation": "GNB",
+  "name": "Gunbreaker",
+  "role": "tank",
+  "skills": [
+    {
+      "id": 16137,
+      "name": "Keen Edge",
+      "potency": 200,
+      "type": "damage"
+    },
+    {
+      "id": 16139,
+      "name": "Brutal Shell",
+      "potency": 300,
+      "type": "damage"
+    },
+    {
+      "id": 16141,
+      "name": "Solid Barrel",
+      "potency": 400,
+      "type": "damage"
+    },
+    {
+      "id": 16143,
+      "name": "Burst Strike",
+      "potency": 380,
+      "type": "damage"
+    },
+    {
+      "id": 16145,
+      "name": "Demon Slice",
+      "potency": 150,
+      "type": "damage"
+    },
+    {
+      "id": 16147,
+      "name": "Demon Slaughter",
+      "potency": 250,
+      "type": "damage"
+    },
+    {
+      "id": 16148,
+      "name": "Lightning Shot",
+      "potency": 150,
+      "type": "damage"
+    },
+    {
+      "id": 16149,
+      "name": "Danger Zone",
+      "potency": 250,
+      "type": "damage"
+    },
+    {
+      "id": 16150,
+      "name": "Royal Guard",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 16151,
+      "name": "Gnashing Fang",
+      "potency": 380,
+      "type": "damage"
+    },
+    {
+      "id": 16152,
+      "name": "Savage Claw",
+      "potency": 460,
+      "type": "damage"
+    },
+    {
+      "id": 16153,
+      "name": "Wicked Talon",
+      "potency": 540,
+      "type": "damage"
+    },
+    {
+      "id": 16154,
+      "name": "Sonic Break",
+      "potency": 300,
+      "type": "damage"
+    },
+    {
+      "id": 16155,
+      "name": "Bow Shock",
+      "potency": 150,
+      "type": "damage"
+    },
+    {
+      "id": 16156,
+      "name": "No Mercy",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 16157,
+      "name": "Blasting Zone",
+      "potency": 700,
+      "type": "damage"
+    },
+    {
+      "id": 16158,
+      "name": "Nebula",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 16159,
+      "name": "Camouflage",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 16161,
+      "name": "Aurora",
+      "potency": 200,
+      "type": "heal"
+    },
+    {
+      "id": 16162,
+      "name": "Superbolide",
+      "potency": 0,
+      "type": "buff"
+    }
+  ]
+}

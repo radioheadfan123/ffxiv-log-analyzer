@@ -1,0 +1,140 @@
+{
+  "id": 33,
+  "abbreviation": "AST",
+  "name": "Astrologian",
+  "role": "healer",
+  "skills": [
+    {
+      "id": 3596,
+      "name": "Malefic",
+      "potency": 180,
+      "type": "damage"
+    },
+    {
+      "id": 3594,
+      "name": "Benefic",
+      "potency": 500,
+      "type": "heal"
+    },
+    {
+      "id": 3598,
+      "name": "Combust",
+      "potency": 40,
+      "type": "damage"
+    },
+    {
+      "id": 3595,
+      "name": "Benefic II",
+      "potency": 800,
+      "type": "heal"
+    },
+    {
+      "id": 3601,
+      "name": "Draw",
+      "potency": 0,
+      "type": "other"
+    },
+    {
+      "id": 3603,
+      "name": "Helios",
+      "potency": 400,
+      "type": "heal"
+    },
+    {
+      "id": 3605,
+      "name": "Ascend",
+      "potency": 0,
+      "type": "other"
+    },
+    {
+      "id": 3606,
+      "name": "Essential Dignity",
+      "potency": 400,
+      "type": "heal"
+    },
+    {
+      "id": 3608,
+      "name": "Aspected Benefic",
+      "potency": 250,
+      "type": "heal"
+    },
+    {
+      "id": 3610,
+      "name": "Aspected Helios",
+      "potency": 250,
+      "type": "heal"
+    },
+    {
+      "id": 3612,
+      "name": "Collective Unconscious",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 3613,
+      "name": "Celestial Opposition",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 3614,
+      "name": "Lightspeed",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 3615,
+      "name": "Synastry",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 7442,
+      "name": "Malefic II",
+      "potency": 200,
+      "type": "damage"
+    },
+    {
+      "id": 7443,
+      "name": "Combust II",
+      "potency": 50,
+      "type": "damage"
+    },
+    {
+      "id": 7444,
+      "name": "Gravity",
+      "potency": 130,
+      "type": "damage"
+    },
+    {
+      "id": 16552,
+      "name": "Malefic III",
+      "potency": 250,
+      "type": "damage"
+    },
+    {
+      "id": 16553,
+      "name": "Combust III",
+      "potency": 60,
+      "type": "damage"
+    },
+    {
+      "id": 16554,
+      "name": "Earthly Star",
+      "potency": 720,
+      "type": "heal"
+    },
+    {
+      "id": 25870,
+      "name": "Divination",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 25873,
+      "name": "Neutral Sect",
+      "potency": 0,
+      "type": "buff"
+    }
+  ]
+}

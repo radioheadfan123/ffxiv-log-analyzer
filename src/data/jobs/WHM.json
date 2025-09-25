@@ -1,0 +1,152 @@
+{
+  "id": 24,
+  "abbreviation": "WHM",
+  "name": "White Mage",
+  "role": "healer",
+  "skills": [
+    {
+      "id": 119,
+      "name": "Stone",
+      "potency": 140,
+      "type": "damage"
+    },
+    {
+      "id": 120,
+      "name": "Cure",
+      "potency": 500,
+      "type": "heal"
+    },
+    {
+      "id": 121,
+      "name": "Aero",
+      "potency": 50,
+      "type": "damage"
+    },
+    {
+      "id": 124,
+      "name": "Medica",
+      "potency": 400,
+      "type": "heal"
+    },
+    {
+      "id": 127,
+      "name": "Raise",
+      "potency": 0,
+      "type": "other"
+    },
+    {
+      "id": 131,
+      "name": "Cure II",
+      "potency": 800,
+      "type": "heal"
+    },
+    {
+      "id": 132,
+      "name": "Protect",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 133,
+      "name": "Esuna",
+      "potency": 0,
+      "type": "other"
+    },
+    {
+      "id": 135,
+      "name": "Stone II",
+      "potency": 200,
+      "type": "damage"
+    },
+    {
+      "id": 136,
+      "name": "Aero II",
+      "potency": 50,
+      "type": "damage"
+    },
+    {
+      "id": 137,
+      "name": "Medica II",
+      "potency": 250,
+      "type": "heal"
+    },
+    {
+      "id": 139,
+      "name": "Regen",
+      "potency": 250,
+      "type": "heal"
+    },
+    {
+      "id": 140,
+      "name": "Holy",
+      "potency": 140,
+      "type": "damage"
+    },
+    {
+      "id": 3570,
+      "name": "Stone III",
+      "potency": 250,
+      "type": "damage"
+    },
+    {
+      "id": 3571,
+      "name": "Aero III",
+      "potency": 70,
+      "type": "damage"
+    },
+    {
+      "id": 3569,
+      "name": "Cure III",
+      "potency": 600,
+      "type": "heal"
+    },
+    {
+      "id": 7430,
+      "name": "Stone IV",
+      "potency": 300,
+      "type": "damage"
+    },
+    {
+      "id": 16533,
+      "name": "Divine Benison",
+      "potency": 500,
+      "type": "shield"
+    },
+    {
+      "id": 25859,
+      "name": "Afflatus Solace",
+      "potency": 800,
+      "type": "heal"
+    },
+    {
+      "id": 25860,
+      "name": "Afflatus Rapture",
+      "potency": 400,
+      "type": "heal"
+    },
+    {
+      "id": 25861,
+      "name": "Afflatus Misery",
+      "potency": 1240,
+      "type": "damage"
+    },
+    {
+      "id": 16531,
+      "name": "Thin Air",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 16532,
+      "name": "Plenary Indulgence",
+      "potency": 200,
+      "type": "heal"
+    },
+    {
+      "id": 25862,
+      "name": "Temperance",
+      "potency": 0,
+      "type": "buff"
+    }
+  ]
+}

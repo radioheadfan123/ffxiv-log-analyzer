@@ -1,0 +1,146 @@
+{
+  "id": 25,
+  "abbreviation": "BLM",
+  "name": "Black Mage",
+  "role": "dps",
+  "skills": [
+    {
+      "id": 142,
+      "name": "Blizzard",
+      "potency": 180,
+      "type": "damage"
+    },
+    {
+      "id": 141,
+      "name": "Fire",
+      "potency": 180,
+      "type": "damage"
+    },
+    {
+      "id": 144,
+      "name": "Thunder",
+      "potency": 50,
+      "type": "damage"
+    },
+    {
+      "id": 145,
+      "name": "Blizzard II",
+      "potency": 80,
+      "type": "damage"
+    },
+    {
+      "id": 147,
+      "name": "Fire II",
+      "potency": 80,
+      "type": "damage"
+    },
+    {
+      "id": 149,
+      "name": "Transpose",
+      "potency": 0,
+      "type": "other"
+    },
+    {
+      "id": 152,
+      "name": "Fire III",
+      "potency": 280,
+      "type": "damage"
+    },
+    {
+      "id": 154,
+      "name": "Blizzard III",
+      "potency": 280,
+      "type": "damage"
+    },
+    {
+      "id": 159,
+      "name": "Thunder II",
+      "potency": 50,
+      "type": "damage"
+    },
+    {
+      "id": 162,
+      "name": "Thunder III",
+      "potency": 50,
+      "type": "damage"
+    },
+    {
+      "id": 165,
+      "name": "Sleep",
+      "potency": 0,
+      "type": "debuff"
+    },
+    {
+      "id": 166,
+      "name": "Blizzard IV",
+      "potency": 320,
+      "type": "damage"
+    },
+    {
+      "id": 168,
+      "name": "Fire IV",
+      "potency": 320,
+      "type": "damage"
+    },
+    {
+      "id": 3576,
+      "name": "Flare",
+      "potency": 260,
+      "type": "damage"
+    },
+    {
+      "id": 3577,
+      "name": "Freeze",
+      "potency": 120,
+      "type": "damage"
+    },
+    {
+      "id": 7419,
+      "name": "Enochian",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 7420,
+      "name": "Blizzard IV",
+      "potency": 320,
+      "type": "damage"
+    },
+    {
+      "id": 7421,
+      "name": "Fire IV",
+      "potency": 320,
+      "type": "damage"
+    },
+    {
+      "id": 16505,
+      "name": "Foul",
+      "potency": 600,
+      "type": "damage"
+    },
+    {
+      "id": 16506,
+      "name": "Thunder IV",
+      "potency": 50,
+      "type": "damage"
+    },
+    {
+      "id": 25793,
+      "name": "Despair",
+      "potency": 400,
+      "type": "damage"
+    },
+    {
+      "id": 25794,
+      "name": "Umbral Soul",
+      "potency": 0,
+      "type": "other"
+    },
+    {
+      "id": 25795,
+      "name": "Xenoglossy",
+      "potency": 880,
+      "type": "damage"
+    }
+  ]
+}

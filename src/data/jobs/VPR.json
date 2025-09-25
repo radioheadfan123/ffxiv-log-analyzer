@@ -1,0 +1,128 @@
+{
+  "id": 41,
+  "abbreviation": "VPR",
+  "name": "Viper",
+  "role": "dps",
+  "skills": [
+    {
+      "id": 34606,
+      "name": "Steel Fangs",
+      "potency": 200,
+      "type": "damage"
+    },
+    {
+      "id": 34607,
+      "name": "Dread Fangs",
+      "potency": 300,
+      "type": "damage"
+    },
+    {
+      "id": 34608,
+      "name": "Hunter's Sting",
+      "potency": 400,
+      "type": "damage"
+    },
+    {
+      "id": 34609,
+      "name": "Swiftskin's Sting",
+      "potency": 400,
+      "type": "damage"
+    },
+    {
+      "id": 34610,
+      "name": "Steel Maw",
+      "potency": 120,
+      "type": "damage"
+    },
+    {
+      "id": 34611,
+      "name": "Dread Maw",
+      "potency": 160,
+      "type": "damage"
+    },
+    {
+      "id": 34612,
+      "name": "Hunter's Bite",
+      "potency": 200,
+      "type": "damage"
+    },
+    {
+      "id": 34613,
+      "name": "Swiftskin's Bite",
+      "potency": 200,
+      "type": "damage"
+    },
+    {
+      "id": 34614,
+      "name": "Writhing Snap",
+      "potency": 150,
+      "type": "damage"
+    },
+    {
+      "id": 34615,
+      "name": "Serpent's Ire",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 34616,
+      "name": "Vicepit",
+      "potency": 400,
+      "type": "damage"
+    },
+    {
+      "id": 34617,
+      "name": "Hunter's Coil",
+      "potency": 500,
+      "type": "damage"
+    },
+    {
+      "id": 34618,
+      "name": "Swiftskin's Coil",
+      "potency": 500,
+      "type": "damage"
+    },
+    {
+      "id": 34619,
+      "name": "Vicepit",
+      "potency": 220,
+      "type": "damage"
+    },
+    {
+      "id": 34620,
+      "name": "Hunter's Den",
+      "potency": 250,
+      "type": "damage"
+    },
+    {
+      "id": 34621,
+      "name": "Swiftskin's Den",
+      "potency": 250,
+      "type": "damage"
+    },
+    {
+      "id": 34622,
+      "name": "First Legacy",
+      "potency": 600,
+      "type": "damage"
+    },
+    {
+      "id": 34623,
+      "name": "Second Legacy",
+      "potency": 700,
+      "type": "damage"
+    },
+    {
+      "id": 34624,
+      "name": "Third Legacy",
+      "potency": 800,
+      "type": "damage"
+    },
+    {
+      "id": 34625,
+      "name": "Fourth Legacy",
+      "potency": 900,
+      "type": "damage"
+    }
+  ]
+}

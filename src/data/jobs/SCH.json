@@ -1,0 +1,146 @@
+{
+  "id": 28,
+  "abbreviation": "SCH",
+  "name": "Scholar",
+  "role": "healer",
+  "skills": [
+    {
+      "id": 163,
+      "name": "Ruin",
+      "potency": 200,
+      "type": "damage"
+    },
+    {
+      "id": 164,
+      "name": "Physick",
+      "potency": 450,
+      "type": "heal"
+    },
+    {
+      "id": 167,
+      "name": "Adloquium",
+      "potency": 300,
+      "type": "shield"
+    },
+    {
+      "id": 172,
+      "name": "Succor",
+      "potency": 200,
+      "type": "shield"
+    },
+    {
+      "id": 173,
+      "name": "Ruin II",
+      "potency": 220,
+      "type": "damage"
+    },
+    {
+      "id": 177,
+      "name": "Resurrection",
+      "potency": 0,
+      "type": "other"
+    },
+    {
+      "id": 178,
+      "name": "Bio",
+      "potency": 20,
+      "type": "damage"
+    },
+    {
+      "id": 179,
+      "name": "Summon Carbuncle",
+      "potency": 0,
+      "type": "other"
+    },
+    {
+      "id": 180,
+      "name": "Aetherflow",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 181,
+      "name": "Energy Drain",
+      "potency": 100,
+      "type": "damage"
+    },
+    {
+      "id": 185,
+      "name": "Lustrate",
+      "potency": 600,
+      "type": "heal"
+    },
+    {
+      "id": 186,
+      "name": "Sacred Soil",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 188,
+      "name": "Indomitability",
+      "potency": 400,
+      "type": "heal"
+    },
+    {
+      "id": 189,
+      "name": "Broil",
+      "potency": 280,
+      "type": "damage"
+    },
+    {
+      "id": 190,
+      "name": "Deployment Tactics",
+      "potency": 0,
+      "type": "other"
+    },
+    {
+      "id": 7434,
+      "name": "Broil II",
+      "potency": 290,
+      "type": "damage"
+    },
+    {
+      "id": 7435,
+      "name": "Emergency Tactics",
+      "potency": 0,
+      "type": "other"
+    },
+    {
+      "id": 7436,
+      "name": "Dissipation",
+      "potency": 0,
+      "type": "buff"
+    },
+    {
+      "id": 16540,
+      "name": "Excogitation",
+      "potency": 800,
+      "type": "heal"
+    },
+    {
+      "id": 16541,
+      "name": "Broil III",
+      "potency": 295,
+      "type": "damage"
+    },
+    {
+      "id": 16542,
+      "name": "Chain Stratagem",
+      "potency": 0,
+      "type": "debuff"
+    },
+    {
+      "id": 16545,
+      "name": "Aetherpact",
+      "potency": 0,
+      "type": "other"
+    },
+    {
+      "id": 25865,
+      "name": "Recitation",
+      "potency": 0,
+      "type": "buff"
+    }
+  ]
+}
