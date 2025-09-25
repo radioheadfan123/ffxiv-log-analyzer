@@ -11,6 +11,7 @@ type Encounter = {
   duty: string | null;
   start_ts: string | null;
   end_ts: string | null;
+  details_parsed: boolean;
   adds?: Array<{ name: string; job?: string; role?: string }> | null;
   party_members?: Array<{ name: string; job?: string; role?: string }> | null;
 };
@@ -19,6 +20,7 @@ export default function EncounterListPage() {
   const [rows, setRows] = useState<Encounter[]>([]);
   const [err, setErr] = useState('');
   const [loading, setLoading] = useState(true);
+  const [parsing, setParsing] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     (async () => {
@@ -31,7 +33,7 @@ export default function EncounterListPage() {
 
       const { data, error } = await supabase
         .from('encounters')
-        .select('id,upload_id,boss,duty,start_ts,end_ts,adds,party_members')
+        .select('id,upload_id,boss,duty,start_ts,end_ts,details_parsed,adds,party_members')
         .order('start_ts', { ascending: false })
         .limit(50);
 
@@ -40,6 +42,39 @@ export default function EncounterListPage() {
       setLoading(false);
     })();
   }, []);
+
+  const handleParseDetails = async (encounterId: string) => {
+    setParsing(prev => new Set(prev).add(encounterId));
+    
+    try {
+      const response = await fetch('/api/parse-encounter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ encounter_id: encounterId })
+      });
+      
+      const result = await response.json();
+      
+      if (result.ok) {
+        // Refresh the encounter list to show updated status
+        setRows(prev => prev.map(row => 
+          row.id === encounterId 
+            ? { ...row, details_parsed: true }
+            : row
+        ));
+      } else {
+        setErr(result.error || 'Parse failed');
+      }
+    } catch (e) {
+      setErr('Failed to parse encounter details');
+    } finally {
+      setParsing(prev => {
+        const next = new Set(prev);
+        next.delete(encounterId);
+        return next;
+      });
+    }
+  };
 
   return (
     <div className="p-6 max-w-3xl">
@@ -64,25 +99,53 @@ export default function EncounterListPage() {
             const partySize = e.party_members?.length || 0;
 
             return (
-              <a
+              <div
                 key={e.id}
-                href={`/encounter/${e.id}`}
-                className="block rounded-xl border p-3 hover:bg-zinc-50"
+                className="rounded-xl border p-3 hover:bg-zinc-50"
               >
-                <div className="font-medium">
-                  {bossName}{' '}
-                  <span className="text-zinc-500">({e.duty || 'Unknown Duty'})</span>
-                  {partySize > 0 && (
-                    <span className="text-xs text-blue-600 ml-2">
-                      {partySize} players
-                    </span>
-                  )}
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="font-medium">
+                      {bossName}{' '}
+                      <span className="text-zinc-500">({e.duty || 'Unknown Duty'})</span>
+                      {partySize > 0 && (
+                        <span className="text-xs text-blue-600 ml-2">
+                          {partySize} players
+                        </span>
+                      )}
+                      {!e.details_parsed && (
+                        <span className="text-xs text-orange-600 ml-2">
+                          • Headers only
+                        </span>
+                      )}
+                    </div>
+                    <div className="text-xs text-zinc-500">
+                      {start ? start.toLocaleString() : '—'}
+                      {dur ? ` • ${dur}s` : ''}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {!e.details_parsed && (
+                      <button
+                        onClick={(ev) => {
+                          ev.preventDefault();
+                          handleParseDetails(e.id);
+                        }}
+                        disabled={parsing.has(e.id)}
+                        className="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+                      >
+                        {parsing.has(e.id) ? 'Parsing...' : 'Parse Details'}
+                      </button>
+                    )}
+                    <a
+                      href={`/encounter/${e.id}`}
+                      className="px-3 py-1 text-xs bg-gray-600 text-white rounded hover:bg-gray-700"
+                    >
+                      View
+                    </a>
+                  </div>
                 </div>
-                <div className="text-xs text-zinc-500">
-                  {start ? start.toLocaleString() : '—'}
-                  {dur ? ` • ${dur}s` : ''}
-                </div>
-              </a>
+              </div>
             );
           })}
         </div>
