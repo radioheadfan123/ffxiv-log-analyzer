@@ -164,8 +164,9 @@ Deno.serve(async (req) => {
     );
 
   } catch (e: unknown) {
-    await note(`ERR: ${String((e as Error)?.message || e)}`);
-    return new Response(JSON.stringify({ error: String((e as Error)?.message || e) }), {
+    const errorMessage = e instanceof Error ? e.message : 'Unknown error occurred';
+    await note(`ERR: ${errorMessage}`);
+    return new Response(JSON.stringify({ error: 'Failed to parse log file' }), {
       status: 500,
       headers: corsHeaders,
     });
