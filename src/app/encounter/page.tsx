@@ -10,6 +10,10 @@ type Encounter = {
   duty: string | null;
   start_ts: string | null;
   end_ts: string | null;
+  // New JSONB fields (may not exist in old schemas)
+  boss_data?: { name: string; job?: string; role?: string } | null;
+  adds?: Array<{ name: string; job?: string; role?: string }> | null;
+  party_members?: Array<{ name: string; job?: string; role?: string }> | null;
 };
 
 export default function EncounterListPage() {
@@ -28,7 +32,7 @@ export default function EncounterListPage() {
 
       const { data, error } = await supabase
         .from('encounters')
-        .select('id,boss,duty,start_ts,end_ts')
+        .select('id,boss,duty,start_ts,end_ts,boss_data,adds,party_members')
         .order('start_ts', { ascending: false })
         .limit(50);
 
@@ -57,6 +61,10 @@ export default function EncounterListPage() {
             const dur =
               start && end ? Math.max(1, Math.round((+end - +start) / 1000)) : null;
 
+            // Use JSONB boss data if available, fallback to string boss
+            const bossName = e.boss_data?.name || e.boss || 'Unknown Boss';
+            const partySize = e.party_members?.length || 0;
+
             return (
               <a
                 key={e.id}
@@ -64,8 +72,13 @@ export default function EncounterListPage() {
                 className="block rounded-xl border p-3 hover:bg-zinc-50"
               >
                 <div className="font-medium">
-                  {e.boss || 'Unknown Boss'}{' '}
+                  {bossName}{' '}
                   <span className="text-zinc-500">({e.duty || 'Unknown Duty'})</span>
+                  {partySize > 0 && (
+                    <span className="text-xs text-blue-600 ml-2">
+                      {partySize} players
+                    </span>
+                  )}
                 </div>
                 <div className="text-xs text-zinc-500">
                   {start ? start.toLocaleString() : '—'}

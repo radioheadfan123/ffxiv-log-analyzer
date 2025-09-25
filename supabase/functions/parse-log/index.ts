@@ -1,5 +1,7 @@
 // supabase/functions/parse-log/index.ts
 import { createClient as createSbClient } from "@supabase/supabase-js";
+import { ActorClassifier, ActorInfo } from './actor-classifier-deno.ts';
+import { loadAllJobs } from './job-loader-deno.ts';
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -12,6 +14,9 @@ const SUPABASE_URL = Deno.env.get("SB_URL")!;
 const SERVICE_ROLE = Deno.env.get("SB_SERVICE_ROLE_KEY")!;
 const supa = createSbClient(SUPABASE_URL, SERVICE_ROLE);
 
+// Eagerly load all job data at startup
+const allJobs = loadAllJobs();
+console.log(`Loaded ${allJobs.length} job definitions for actor classification`);
 
 type InvokeBody = { upload_id: string; path: string };
 
@@ -123,14 +128,16 @@ Deno.serve(async (req) => {
       const encounter_id = enc.id as string;
       totalEncounters++;
 
-      // 2) parse chat damage (00)
-      const tgtCounts = new Map<string, number>();
-      const attackerSet = new Set<string>();
+      // 2) parse chat damage and collect actor statistics
+      const actorStats = new Map<string, ActorInfo>();
       type Ev = {
         tmpName: string; encounter_id: string; ts: string; actor_id: string | null;
         type: string; skill: string; amount: number; crit: boolean; direct_hit: boolean;
       };
       const events: Ev[] = [];
+
+      // Initialize actor classifier
+      const classifier = new ActorClassifier();
 
       for (const line of fight.lines) {
         const p = line.split("|");
@@ -144,25 +151,51 @@ Deno.serve(async (req) => {
         if (!mHit && !mTakes) continue;
 
         let attacker = "";
+        let target = "";
         let amount = 0;
         const isCrit = /critical/i.test(rawMsg);
         const isDH   = /direct hit/i.test(rawMsg);
 
         if (mHit) {
           attacker = mHit[1].trim();
-          const target = mHit[2].trim();
+          target = mHit[2].trim();
           amount = Number(mHit[3] || 0);
-          if (target) tgtCounts.set(target, (tgtCounts.get(target) || 0) + 1);
         } else {
           attacker = "Unknown";
-          const target = mTakes![1].trim();
+          target = mTakes![1].trim();
           amount = Number(mTakes![2] || 0);
-          if (target) tgtCounts.set(target, (tgtCounts.get(target) || 0) + 1);
         }
 
-        if (!attacker || !Number.isFinite(amount) || amount <= 0) continue;
+        if (!attacker || !target || !Number.isFinite(amount) || amount <= 0) continue;
 
-        attackerSet.add(attacker);
+        // Update attacker stats
+        if (!actorStats.has(attacker)) {
+          actorStats.set(attacker, {
+            name: attacker,
+            totalDamageDealt: 0,
+            totalDamageTaken: 0,
+            hitCount: 0,
+            skillsUsed: new Set<string>()
+          });
+        }
+        const attackerStat = actorStats.get(attacker)!;
+        attackerStat.totalDamageDealt += amount;
+        attackerStat.skillsUsed.add("chat"); // Basic skill tracking from chat
+
+        // Update target stats
+        if (!actorStats.has(target)) {
+          actorStats.set(target, {
+            name: target,
+            totalDamageDealt: 0,
+            totalDamageTaken: 0,
+            hitCount: 0,
+            skillsUsed: new Set<string>()
+          });
+        }
+        const targetStat = actorStats.get(target)!;
+        targetStat.totalDamageTaken += amount;
+        targetStat.hitCount += 1;
+
         events.push({
           tmpName: attacker,
           encounter_id,
@@ -176,27 +209,61 @@ Deno.serve(async (req) => {
         });
       }
 
-      // 3) boss name guess
-      const boss = [...tgtCounts.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ?? "Unknown";
-      await supa.from("encounters").update({ boss }).eq("id", encounter_id);
+      // 3) classify actors using comprehensive heuristics
+      const classification = classifier.classifyActors(actorStats);
+      
+      // Prepare JSONB data for encounter
+      const bossData = classification.boss ? ActorClassifier.toJsonObject(classification.boss) : null;
+      const addsData = classification.adds.map(add => ActorClassifier.toJsonObject(add));
+      const partyData = classification.partyMembers.map(member => ActorClassifier.toJsonObject(member));
 
-      // 4) ensure actors
-      const names = Array.from(attackerSet);
-      let idByName = new Map<string, string>();
+      // Determine duty name (could be enhanced with duty detection logic)
+      const dutyName = "Unknown Duty"; // TODO: Add duty detection
+      const bossName = classification.boss?.name || "Unknown Boss";
 
-      if (names.length) {
+      // Update encounter with structured data
+      const encounterUpdateData: Record<string, unknown> = {
+        duty: dutyName,
+        boss: bossName // Keep string for backward compatibility
+      };
+
+      // Add JSONB columns if they exist in the schema
+      // This allows the code to work with both old and new schemas
+      try {
+        encounterUpdateData.boss_data = bossData;
+        encounterUpdateData.adds = addsData;
+        encounterUpdateData.party_members = partyData;
+      } catch {
+        // If JSONB columns don't exist yet, just use the string boss field
+        console.log("JSONB columns not yet available, using legacy format");
+      }
+
+      await supa.from("encounters").update(encounterUpdateData).eq("id", encounter_id);
+
+      // 4) ensure actors with enhanced job detection
+      const allActorNames = Array.from(actorStats.keys());
+      const idByName = new Map<string, string>();
+
+      if (allActorNames.length) {
         await note(`encounter ${fIdx + 1}: actors select/insert`);
         const { data: existing, error: exErr } = await supa
           .from("actors")
           .select("id,name")
           .eq("encounter_id", encounter_id)
-          .in("name", names);
+          .in("name", allActorNames);
         if (exErr) { await note(`actors select err`); throw exErr; }
         if (existing) for (const a of existing) idByName.set(a.name, a.id);
 
-        const missing = names.filter((n) => !idByName.has(n)).map((name) => ({
-          encounter_id, name, job: "UNK", role: "dps",
-        }));
+        const missing = allActorNames.filter((n) => !idByName.has(n)).map((name) => {
+          const actorInfo = actorStats.get(name);
+          return {
+            encounter_id, 
+            name, 
+            job: actorInfo?.job || "UNK", 
+            role: actorInfo?.role || "dps",
+          };
+        });
+        
         if (missing.length) {
           const { data: inserted, error: insErr } = await supa
             .from("actors")
@@ -279,9 +346,9 @@ totalEvents += ready.length;
       { status: 200, headers: corsHeaders },
     );
 
-  } catch (e: any) {
-    await note(`ERR: ${String(e?.message || e)}`);
-    return new Response(JSON.stringify({ error: String(e?.message || e) }), {
+  } catch (e: unknown) {
+    await note(`ERR: ${String((e as Error)?.message || e)}`);
+    return new Response(JSON.stringify({ error: String((e as Error)?.message || e) }), {
       status: 500,
       headers: corsHeaders,
     });

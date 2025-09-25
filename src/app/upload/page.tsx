@@ -11,6 +11,9 @@ type Encounter = {
   duty: string | null;
   start_ts: string | null;
   end_ts: string | null;
+  // New JSONB fields
+  boss_data?: { name: string; job?: string; role?: string } | null;
+  party_members?: Array<{ name: string; job?: string; role?: string }> | null;
 };
 
 export default function UploadPage() {
@@ -64,14 +67,15 @@ export default function UploadPage() {
         body: { upload_id: ins.id, path },
       });
 
-      if ((fn as any).error) {
-        throw new Error(`Edge error: ${(fn as any).error.message}`);
+      if (fn.error) {
+        throw new Error(`Edge error: ${fn.error.message}`);
       }
 
+      const responseData = fn.data as { encounter_ids?: string[]; encounters?: string[]; ids?: string[] } | null;
       const ids: string[] =
-        (fn.data as any)?.encounter_ids ??
-        (fn.data as any)?.encounters ??
-        (fn.data as any)?.ids ??
+        responseData?.encounter_ids ??
+        responseData?.encounters ??
+        responseData?.ids ??
         [];
 
       if (ids.length === 0) {
@@ -89,7 +93,7 @@ export default function UploadPage() {
       // 5) Multiple encounters → fetch metadata and show a picker
       const { data: encs, error: encErr } = await supabase
         .from('encounters')
-        .select('id,boss,duty,start_ts,end_ts')
+        .select('id,boss,duty,start_ts,end_ts,boss_data,party_members')
         .in('id', ids);
       if (encErr) throw new Error(`Load encounters error: ${encErr.message}`);
 
@@ -100,10 +104,11 @@ export default function UploadPage() {
         return tb - ta;
       });
 
-      setEncounters(sorted as Encounter[]);
+      setEncounters(sorted);
       setMsg(`Select an encounter (${sorted.length} found)`);
-    } catch (err: any) {
-      setMsg(err?.message ?? String(err));
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      setMsg(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -130,6 +135,11 @@ export default function UploadPage() {
             const end = e.end_ts ? new Date(e.end_ts) : null;
             const dur =
               start && end ? Math.max(1, Math.round((+end - +start) / 1000)) : null;
+            
+            // Use JSONB boss data if available, fallback to string boss
+            const bossName = e.boss_data?.name || e.boss || 'Unknown Boss';
+            const partySize = e.party_members?.length || 0;
+            
             return (
               <a
                 key={e.id}
@@ -137,8 +147,13 @@ export default function UploadPage() {
                 className="block rounded-xl border p-3 hover:bg-zinc-50"
               >
                 <div className="font-medium">
-                  {e.boss || 'Unknown Boss'}{' '}
+                  {bossName}{' '}
                   <span className="text-zinc-500">({e.duty || 'Unknown Duty'})</span>
+                  {partySize > 0 && (
+                    <span className="text-xs text-blue-600 ml-2">
+                      {partySize} players
+                    </span>
+                  )}
                 </div>
                 <div className="text-xs text-zinc-500">
                   {start ? start.toLocaleString() : '—'}
