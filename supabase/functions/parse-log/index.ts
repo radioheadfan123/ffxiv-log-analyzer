@@ -121,7 +121,7 @@ Deno.serve(async (req) => {
       // 1) create encounter
       const { data: enc, error: encErr } = await supa
         .from("encounters")
-        .insert({ upload_id, duty: "Unknown Duty", boss_legacy: "Unknown", start_ts: fight.start, end_ts: fight.end })
+        .insert({ upload_id, duty: "Unknown Duty", start_ts: fight.start, end_ts: fight.end })
         .select("id")
         .single();
       if (encErr) { await note(`encounter insert err`); throw encErr; }
@@ -218,14 +218,12 @@ Deno.serve(async (req) => {
       const partyData = classification.partyMembers.map(member => ActorClassifier.toJsonObject(member));
 
       // Determine duty name (could be enhanced with duty detection logic)
-      const dutyName = "Unknown Duty"; // TODO: Add duty detection
-      const bossName = classification.boss?.name || "Unknown Boss";
+      const dutyName = "Unknown Duty";
 
       // Update encounter with structured data
       const encounterUpdateData: Record<string, unknown> = {
         duty: dutyName,
-        boss_legacy: bossName, // Keep string for backward compatibility
-        boss: bossData, // New JSONB boss field
+        boss: bossData,
         adds: addsData,
         party_members: partyData
       };
