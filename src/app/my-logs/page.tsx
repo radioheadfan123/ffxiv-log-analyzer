@@ -12,6 +12,19 @@ type Upload = {
   created_at: string;
 };
 
+// Add this Encounter type:
+type Encounter = {
+  id: string;
+  upload_id: string;
+  boss: { name: string; job?: string; role?: string } | null;
+  duty: string | null;
+  start_ts: string | null;
+  end_ts: string | null;
+  adds?: Array<{ name: string; job?: string; role?: string }> | null;
+  party_members?: Array<{ name: string; job?: string; role?: string }> | null;
+  lowest_boss_hp_pct?: number | null;
+};
+
 export default function MyLogsPage() {
   const [logs, setLogs] = useState<Upload[]>([]);
   const [loading, setLoading] = useState(true);
