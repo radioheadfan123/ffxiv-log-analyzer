@@ -118,6 +118,34 @@ function getTimestamp(line: string): string {
   return p[1] || "";
 }
 
+// --- Helper to extract boss HP entries from 38/39 log lines ---
+function extractBossHpFromLines(
+  lines: string[],
+  bossName: string
+): Array<{ hp: number; maxHp: number; ts: string; line: string }> {
+  const boss = bossName.toLowerCase();
+  const HP_OPCODES = new Set(["38", "39"]);
+  const result: Array<{ hp: number; maxHp: number; ts: string; line: string }> = [];
+  for (const line of lines) {
+    const parts = line.split("|");
+    if (parts.length < 7) continue;
+    if (!HP_OPCODES.has(parts[0])) continue;
+    if (!(parts[3] && parts[3].toLowerCase().includes(boss))) continue;
+    // FFXIV 38/39 lines: curHP = parts[5], maxHP = parts[6]
+    const hp = Number(parts[5]);
+    const maxHp = Number(parts[6]);
+    if (!isNaN(hp) && !isNaN(maxHp)) {
+      result.push({
+        hp,
+        maxHp,
+        ts: parts[1] || "",
+        line
+      });
+    }
+  }
+  return result;
+}
+
 type EncounterSummary = {
   startLine: number;
   endLine: number;
@@ -126,6 +154,10 @@ type EncounterSummary = {
   boss: string;
   instance: string;
   type: "kill" | "wipe";
+  lowestBossHp?: number | null;
+  maxHp?: number | null;
+  lowestBossHpPct?: number | null;
+  bossHpEntries?: Array<{ hp: number; maxHp: number; ts: string; line: string }>;
   debug: {
     log: string[];
   };
@@ -219,7 +251,21 @@ export function scanLogForEncounters(
     // Wipe detection: all unique party members dead
     if (Array.from(partyAlive.values()).every(v => !v)) {
       const wipeTime = getTimestamp(line);
-      debugLines.push(`[DEBUG] Encounter end (wipe): all dead at ${wipeTime} (line ${i})`);
+      const encounterLines = lines.slice(encounterStart, i + 1);
+      const bossHpEntries = extractBossHpFromLines(encounterLines, encounterBoss);
+      const lowestBossHp = bossHpEntries.length
+        ? bossHpEntries.reduce((min, entry) => Math.min(min, entry.hp), bossHpEntries[0].hp)
+        : null;
+      const maxHp = bossHpEntries.length ? bossHpEntries[0].maxHp : null;
+      const lowestBossHpPct =
+        lowestBossHp === 0
+          ? 0
+          : lowestBossHp !== null && maxHp
+            ? Math.round((lowestBossHp / maxHp) * 1000) / 10 // e.g. 13.7
+            : null;
+      debugLines.push(
+        `[DEBUG] Encounter end (wipe): all dead at ${wipeTime} (line ${i}), lowest boss HP: ${lowestBossHp} (${lowestBossHpPct === 0 ? "kill" : lowestBossHpPct !== null ? lowestBossHpPct + "%" : "no hp data"})`
+      );
       encounters.push({
         startLine: encounterStart,
         endLine: i,
@@ -228,6 +274,10 @@ export function scanLogForEncounters(
         boss: encounterBoss,
         instance: encounterInstance,
         type: "wipe",
+        lowestBossHp,
+        maxHp,
+        lowestBossHpPct,
+        bossHpEntries,
         debug: { log: [...debugLines] }
       });
       // Reset state for next pull
@@ -243,7 +293,21 @@ export function scanLogForEncounters(
     // Boss kill detection: end encounter immediately
     if (isBossKill(line, bossNames)) {
       const killTime = getTimestamp(line);
-      debugLines.push(`[DEBUG] Encounter end (kill): boss defeated at ${killTime} (line ${i})`);
+      const encounterLines = lines.slice(encounterStart, i + 1);
+      const bossHpEntries = extractBossHpFromLines(encounterLines, encounterBoss);
+      const lowestBossHp = bossHpEntries.length
+        ? bossHpEntries.reduce((min, entry) => Math.min(min, entry.hp), bossHpEntries[0].hp)
+        : null;
+      const maxHp = bossHpEntries.length ? bossHpEntries[0].maxHp : null;
+      const lowestBossHpPct =
+        lowestBossHp === 0
+          ? 0
+          : lowestBossHp !== null && maxHp
+            ? Math.round((lowestBossHp / maxHp) * 1000) / 10
+            : null;
+      debugLines.push(
+        `[DEBUG] Encounter end (kill): boss defeated at ${killTime} (line ${i}), lowest boss HP: ${lowestBossHp} (${lowestBossHpPct === 0 ? "kill" : lowestBossHpPct !== null ? lowestBossHpPct + "%" : "no hp data"})`
+      );
       encounters.push({
         startLine: encounterStart,
         endLine: i,
@@ -252,6 +316,10 @@ export function scanLogForEncounters(
         boss: encounterBoss,
         instance: encounterInstance,
         type: "kill",
+        lowestBossHp,
+        maxHp,
+        lowestBossHpPct,
+        bossHpEntries,
         debug: { log: [...debugLines] }
       });
       inEncounter = false;

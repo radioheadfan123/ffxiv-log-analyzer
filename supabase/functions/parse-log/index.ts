@@ -156,13 +156,16 @@ Deno.serve(async (req) => {
       const { data: inserted, error: encErr } = await supa
         .from("encounters")
         .insert({
-          upload_id: body.upload_id,
-          duty: enc.instance,
-          boss: { name: enc.boss },
-          start_ts: enc.startTimestamp,
-          end_ts: enc.endTimestamp,
-          details_parsed: false,
-          raw_log_path: body.path
+    upload_id: body.upload_id,
+    duty: enc.instance,
+    boss: { name: enc.boss },
+    start_ts: enc.startTimestamp,
+    end_ts: enc.endTimestamp,
+    details_parsed: false,
+    raw_log_path: body.path,
+    lowest_boss_hp_pct: enc.lowestBossHpPct,
+    lowest_boss_hp: enc.lowestBossHp,
+    max_boss_hp: enc.maxHp,
         })
         .select("id")
         .single();

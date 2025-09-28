@@ -14,7 +14,15 @@ type Encounter = {
   end_ts: string | null;
   adds?: Array<{ name: string; job?: string; role?: string }> | null;
   party_members?: Array<{ name: string; job?: string; role?: string }> | null;
+  lowest_boss_hp_pct?: number | null; // <-- Add this field
 };
+
+function formatDuration(seconds: number | null): string {
+  if (!seconds || isNaN(seconds)) return '';
+  const min = Math.floor(seconds / 60);
+  const sec = seconds % 60;
+  return `${min}m ${sec}s`;
+}
 
 export default function UploadPage() {
   const [msg, setMsg] = useState<string>('');
@@ -93,7 +101,7 @@ export default function UploadPage() {
       // 5) Multiple encounters → fetch metadata and show a picker
       const { data: encs, error: encErr } = await supabase
         .from('encounters')
-        .select('id,upload_id,boss,duty,start_ts,end_ts,adds,party_members')
+        .select('id,upload_id,boss,duty,start_ts,end_ts,adds,party_members,lowest_boss_hp_pct') // <-- fetch hp pct
         .in('id', ids);
       if (encErr) throw new Error(`Load encounters error: ${encErr.message}`);
 
@@ -138,7 +146,15 @@ export default function UploadPage() {
             
             const bossName = e.boss?.name || 'Unknown Boss';
             const partySize = e.party_members?.length || 0;
-            
+
+            let bossHpDisplay = '';
+            if (typeof e.lowest_boss_hp_pct === 'number') {
+              bossHpDisplay =
+                e.lowest_boss_hp_pct === 0
+                  ? 'Kill'
+                  : `${e.lowest_boss_hp_pct.toFixed(1)}% remaining`;
+            }
+
             return (
               <a
                 key={e.id}
@@ -156,8 +172,13 @@ export default function UploadPage() {
                 </div>
                 <div className="text-xs text-zinc-500">
                   {start ? start.toLocaleString() : '—'}
-                  {dur ? ` • ${dur}s` : ''}
+                  {dur !== null ? ` • ${formatDuration(dur)}` : ''}
                 </div>
+                {bossHpDisplay && (
+                  <div className="text-xs text-green-600 mt-1">
+                    {bossHpDisplay}
+                  </div>
+                )}
               </a>
             );
           })}
