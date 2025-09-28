@@ -29,7 +29,8 @@ export default function MyLogsPage() {
   const [logs, setLogs] = useState<Upload[]>([]);
   const [loading, setLoading] = useState(true);
   const [msg, setMsg] = useState('');
-  const [encounters, setEncounters] = useState<any[] | null>(null);
+  // Use Encounter[] instead of any[]
+  const [encounters, setEncounters] = useState<Encounter[] | null>(null);
   const router = useRouter();
 
   useEffect(() => {
