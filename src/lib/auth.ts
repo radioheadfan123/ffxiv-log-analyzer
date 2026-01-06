@@ -1,7 +1,7 @@
 import { supabase } from '@/lib/supabase';
 
 export async function ensureUser() {
-  // Make sure we have a Supabase Auth user
+  // Ensure auth user exists (anon or signed in)
   let { data: { user } } = await supabase.auth.getUser();
   if (!user) {
     await supabase.auth.signInAnonymously();
@@ -9,20 +9,19 @@ export async function ensureUser() {
     if (!user) return null;
   }
 
-  // Now check if this user exists in our users table
-  const { data, error } = await supabase
-    .from('users')
-    .select('id')
-    .eq('id', user.id)
-    .single();
+  // Call server to ensure public.users row exists (server uses service role)
+  try {
+    const res = await fetch('/api/ensure-user', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: user.id }),
+    });
 
-  if (error && error.code !== 'PGRST116') { // Not a "No rows" error
-    throw error;
-  }
-
-  // If not found, insert
-  if (!data) {
-    await supabase.from('users').insert({ id: user.id }).single();
+    if (!res.ok) {
+      console.warn('ensure-user endpoint returned', await res.text());
+    }
+  } catch (err) {
+    console.error('Failed to call /api/ensure-user', err);
   }
 
   return user;

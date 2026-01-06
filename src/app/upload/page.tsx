@@ -14,7 +14,7 @@ type Encounter = {
   end_ts: string | null;
   adds?: Array<{ name: string; job?: string; role?: string }> | null;
   party_members?: Array<{ name: string; job?: string; role?: string }> | null;
-  lowest_boss_hp_pct?: number | null; // <-- Add this field
+  lowest_boss_hp_pct?: number | null;
 };
 
 function formatDuration(seconds: number | null): string {
@@ -39,7 +39,6 @@ export default function UploadPage() {
     setLoading(true);
 
     try {
-      // 1) Make sure we have a session
       const user = await ensureUser();
       if (!user) {
         setMsg('Authentication failed.');
@@ -47,66 +46,69 @@ export default function UploadPage() {
         return;
       }
 
-      // 2) Create a signed upload URL and upload the file
       const path = `${user.id}/${Date.now()}_${file.name}`;
 
-      const { data: signed, error: signErr } = await supabase
-        .storage.from('logs')
-        .createSignedUploadUrl(path);
-      if (signErr || !signed) throw new Error(`Signed URL error: ${signErr?.message ?? 'unknown'}`);
+      // 1) request signed upload token from server
+      const tokenRes = await fetch('/api/get-upload-token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ path }),
+      });
+      const tokenJson = await tokenRes.json();
+      if (!tokenRes.ok || tokenJson.error) throw new Error(tokenJson.error ?? 'Failed to get upload token');
 
-      const { error: upErr } = await supabase
-        .storage.from('logs')
-        .uploadToSignedUrl(path, signed.token, file);
+      // 2) upload directly to Supabase Storage using the signed token
+      const { error: upErr } = await supabase.storage
+        .from('logs')
+        .uploadToSignedUrl(path, tokenJson.token, file);
       if (upErr) throw new Error(`Upload error: ${upErr.message}`);
 
-      // 3) Insert upload record
-      const { data: ins, error: insErr } = await supabase
-        .from('uploads')
-        .insert({ user_id: user.id, path, status: 'uploaded' })
-        .select('id')
-        .single();
-      if (insErr || !ins) throw new Error(`DB insert error: ${insErr?.message ?? 'unknown'}`);
-
-      setMsg('Uploaded ✓ Parsing…');
-
-      // 4) Invoke the parser
-      const fn = await supabase.functions.invoke('parse-log', {
-        body: { upload_id: ins.id, path },
+      // 3) tell server to create the uploads DB row and optionally invoke parser
+      const createRes = await fetch('/api/create-upload-record', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: user.id, path, invokeParser: true }),
       });
-
-      if (fn.error) {
-        throw new Error(`Edge error: ${fn.error.message}`);
+      const createJson = await createRes.json();
+      if (!createRes.ok || createJson.error) {
+        throw new Error(createJson.error ?? 'Failed to create upload record');
       }
 
-      const responseData = fn.data as { encounter_ids?: string[]; encounters?: string[]; ids?: string[] } | null;
-      const ids: string[] =
-        responseData?.encounter_ids ??
-        responseData?.encounters ??
-        responseData?.ids ??
-        [];
+      const uploaded = createJson.upload;
+      const parseResultRaw = createJson.parseResult;
+      // attempt to extract encounter ids from parseResult
+      let ids: string[] =
+        parseResultRaw?.encounter_ids ?? parseResultRaw?.encounters ?? parseResultRaw?.ids ?? [];
 
-      if (ids.length === 0) {
-        setMsg('Parsed, but no encounters with data were found.');
+      // fallback: query encounters by upload_id if server didn't return ids
+      if ((!ids || ids.length === 0) && uploaded?.id) {
+        const { data: encsByUpload, error: encErr } = await supabase
+          .from('encounters')
+          .select('id')
+          .eq('upload_id', uploaded.id);
+        if (!encErr && Array.isArray(encsByUpload) && encsByUpload.length > 0) {
+          ids = encsByUpload.map((r: any) => r.id);
+        }
+      }
+
+      if (!ids || ids.length === 0) {
+        setMsg('Uploaded ✓ Parsing… (no encounters available yet)');
         setLoading(false);
         return;
       }
 
       if (ids.length === 1) {
-        // Single encounter → navigate immediately
         router.push(`/encounter/${ids[0]}`);
         return;
       }
 
-      // 5) Multiple encounters → fetch metadata and show a picker
       const { data: encs, error: encErr } = await supabase
         .from('encounters')
-        .select('id,upload_id,boss,duty,start_ts,end_ts,adds,party_members,lowest_boss_hp_pct') // <-- fetch hp pct
+        .select('id,upload_id,boss,duty,start_ts,end_ts,adds,party_members,lowest_boss_hp_pct')
         .in('id', ids);
       if (encErr) throw new Error(`Load encounters error: ${encErr.message}`);
 
-      // Sort by start time descending for convenience
-      const sorted = (encs ?? []).sort((a, b) => {
+      const sorted = (encs ?? []).sort((a: any, b: any) => {
         const ta = a.start_ts ? new Date(a.start_ts).getTime() : 0;
         const tb = b.start_ts ? new Date(b.start_ts).getTime() : 0;
         return tb - ta;
@@ -143,7 +145,7 @@ export default function UploadPage() {
             const end = e.end_ts ? new Date(e.end_ts) : null;
             const dur =
               start && end ? Math.max(1, Math.round((+end - +start) / 1000)) : null;
-            
+
             const bossName = e.boss?.name || 'Unknown Boss';
             const partySize = e.party_members?.length || 0;
 
